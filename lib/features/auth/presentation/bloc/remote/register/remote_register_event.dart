@@ -1,11 +1,13 @@
-import 'package:clean_architecture_poktani/features/auth/domain/entities/request/register_request_entities.dart';
+abstract class RegisterEvent {}
 
-abstract class RemoteRegisterEvent {
-  const RemoteRegisterEvent();
-}
+class RegisterButtonPressed extends RegisterEvent {
+  final String phoneNumber;
+  final String password;
+  final String passwordConfirmation;
 
-class SubmitRegisterEvent extends RemoteRegisterEvent {
-  final RegisterRequestEntities registerData;
-
-  const SubmitRegisterEvent({required this.registerData});
+  RegisterButtonPressed({
+    required this.phoneNumber,
+    required this.password,
+    required this.passwordConfirmation,
+  });
 }
