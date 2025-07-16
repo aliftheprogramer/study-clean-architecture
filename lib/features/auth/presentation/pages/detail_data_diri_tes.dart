@@ -2,8 +2,6 @@ import 'package:clean_architecture_poktani/features/auth/domain/entities/request
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_auth_text_field.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button.dart';
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
-
 class DetailDataDiriPageTes extends StatelessWidget {
   final RegisterData registrationData;
 
