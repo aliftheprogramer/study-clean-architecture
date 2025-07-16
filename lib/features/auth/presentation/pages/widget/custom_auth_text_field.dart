@@ -9,6 +9,7 @@ class CustomAuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final bool obsecureText;
   final VoidCallback? onToggleObsecure;
+  final bool isAlamat;
 
   const CustomAuthTextField({
     super.key,
@@ -19,6 +20,7 @@ class CustomAuthTextField extends StatelessWidget {
     required this.controller,
     required this.obsecureText,
     this.onToggleObsecure,
+    this.isAlamat = false,
   });
 
   @override
@@ -35,7 +37,11 @@ class CustomAuthTextField extends StatelessWidget {
         const SizedBox(height: 8),
         TextField(
           controller: controller,
-          keyboardType: isNumber ? TextInputType.number : keyboardType,
+          keyboardType: isAlamat
+              ? TextInputType.multiline
+              : (isNumber ? TextInputType.number : keyboardType),
+          maxLines: isAlamat ? 4 : 1,
+          minLines: isAlamat ? 4 : 1,
           obscureText: obsecureText,
           inputFormatters: isNumber
               ? [FilteringTextInputFormatter.digitsOnly]
@@ -57,7 +63,7 @@ class CustomAuthTextField extends StatelessWidget {
                       obsecureText ? Icons.visibility_off : Icons.visibility,
                     ),
                   )
-                : null
+                : null,
           ),
         ),
       ],
