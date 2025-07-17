@@ -4,13 +4,13 @@ import 'dart:convert';
 class SignupReqParams {
   final String name;
   final String password;
-  final String password_confimation;
+  final String password_confirmation;
   final String phone_number;
   final String address;
   SignupReqParams({
     required this.name,
     required this.password,
-    required this.password_confimation,
+    required this.password_confirmation,
     required this.phone_number,
     required this.address,
   });
@@ -19,7 +19,7 @@ class SignupReqParams {
     return <String, dynamic>{
       'name': name,
       'password': password,
-      'password_confimation': password_confimation,
+      'password_confirmation': password_confirmation,
       'phone_number': phone_number,
       'address': address,
     };
@@ -29,7 +29,7 @@ class SignupReqParams {
     return SignupReqParams(
       name: map['name'] as String,
       password: map['password'] as String,
-      password_confimation: map['password_confimation'] as String,
+      password_confirmation: map['password_confirmation'] as String,
       phone_number: map['phone_number'] as String,
       address: map['address'] as String,
     );

@@ -1,7 +1,9 @@
+import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/welcome.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  setupServiceLocator();
   runApp(const MyApp());
 }
 

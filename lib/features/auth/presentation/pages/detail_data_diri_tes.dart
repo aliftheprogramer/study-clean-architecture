@@ -1,7 +1,12 @@
+import 'package:clean_architecture_poktani/core/services/services_locator.dart';
+import 'package:clean_architecture_poktani/features/auth/data/models/signup_req.dart';
 import 'package:clean_architecture_poktani/features/auth/domain/entities/request/register/register_data.dart';
+import 'package:clean_architecture_poktani/features/auth/domain/usecase/signup_usecases.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_auth_text_field.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/web.dart';
+
 class DetailDataDiriPageTes extends StatelessWidget {
   final RegisterData registrationData;
 
@@ -49,8 +54,19 @@ class DetailDataDiriPageTes extends StatelessWidget {
             CustomSubmitAuthButton(
               label: "Daftar Petani",
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("button daftar di tekan")),
+                Logger().i("Signup request: ${registrationData.password}");
+                Logger().i(
+                  "Signup request: ${registrationData.password_confirmation}",
+                );
+                sl<SignupUsecase>().call(
+                  param: SignupReqParams(
+                    name: _namaLengkapController.text,
+                    password: registrationData.password,
+                    password_confirmation:
+                        registrationData.password_confirmation,
+                    phone_number: registrationData.phone_number,
+                    address: _alamatLengkapController.text,
+                  ),
                 );
               },
             ),

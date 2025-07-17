@@ -6,7 +6,7 @@ import 'package:dartz/dartz.dart';
 
 class SignupUsecase implements Usecase<Either, SignupReqParams> {
   @override
-  Future<Either> call(SignupReqParams? param) async {
+  Future<Either> call({SignupReqParams? param}) async {
     return sl<AuthRepository>().signUp(param!);
   }
 }
