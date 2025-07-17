@@ -1,6 +1,6 @@
 import 'package:clean_architecture_poktani/features/auth/domain/entities/request/register/register_data.dart';
-import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/register/remote_regiser_state.dart';
-import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/register/remote_register_event.dart';
+import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/start_register/remote_regiser_state.dart';
+import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/start_register/remote_register_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 

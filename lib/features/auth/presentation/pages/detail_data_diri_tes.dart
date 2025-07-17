@@ -2,9 +2,13 @@ import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 import 'package:clean_architecture_poktani/features/auth/data/models/signup_req.dart';
 import 'package:clean_architecture_poktani/features/auth/domain/entities/request/register/register_data.dart';
 import 'package:clean_architecture_poktani/features/auth/domain/usecase/signup_usecases.dart';
+import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/final_register/button_state.dart';
+import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/final_register/button_state_cubit.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_auth_text_field.dart';
-import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button.dart';
+import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button_final.dart';
+import 'package:clean_architecture_poktani/features/main/presentation/pages/main_navigator_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
 
 class DetailDataDiriPageTes extends StatelessWidget {
@@ -17,7 +21,36 @@ class DetailDataDiriPageTes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _buildBody(context));
+    return Scaffold(
+      body: BlocProvider(
+        create: (context) => ButtonStateCubit(),
+        child: BlocListener<ButtonStateCubit, ButtonState>(
+          listener: (context, state) {
+            if (state is ButtonSuccessState) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MainNavigatorPage(),
+                ),
+              );
+            }
+            if (state is ButtonFailureState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
+          child: Builder(
+            builder: (context) {
+              return _buildBody(context);
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildBody(BuildContext context) {
@@ -51,28 +84,28 @@ class DetailDataDiriPageTes extends StatelessWidget {
               isAlamat: true,
             ),
             SizedBox(height: 32),
-            CustomSubmitAuthButton(
-              label: "Daftar Petani",
-              onPressed: () {
-                Logger().i("Signup request: ${registrationData.password}");
-                Logger().i(
-                  "Signup request: ${registrationData.password_confirmation}",
-                );
-                sl<SignupUsecase>().call(
-                  param: SignupReqParams(
-                    name: _namaLengkapController.text,
-                    password: registrationData.password,
-                    password_confirmation:
-                        registrationData.password_confirmation,
-                    phone_number: registrationData.phone_number,
-                    address: _alamatLengkapController.text,
-                  ),
-                );
-              },
-            ),
+            _createAccountButton(context),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _createAccountButton(BuildContext context) {
+    return CustomSubmitAuthButtonFinal(
+      label: "Daftar Petani",
+      onPressed: () {
+        context.read<ButtonStateCubit>().execute(
+          usecase: sl<SignupUsecase>(),
+          params: SignupReqParams(
+            name: _namaLengkapController.value.text,
+            password: registrationData.password,
+            password_confirmation: registrationData.password_confirmation,
+            phone_number: registrationData.phone_number,
+            address: _alamatLengkapController.text,
+          ),
+        );
+      },
     );
   }
 }

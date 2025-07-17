@@ -1,6 +1,6 @@
-import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/register/remote_regiser_state.dart';
-import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/register/remote_register_bloc.dart';
-import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/register/remote_register_event.dart';
+import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/start_register/remote_regiser_state.dart';
+import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/start_register/remote_register_bloc.dart';
+import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/start_register/remote_register_event.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/detail_data_diri_tes.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_auth_text_field.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button.dart';
