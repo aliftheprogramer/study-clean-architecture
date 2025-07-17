@@ -7,6 +7,7 @@ class ButtonStateCubit extends Cubit<ButtonState> {
   ButtonStateCubit() : super(ButtonInitialState());
 
   void execute({dynamic params, required Usecase usecase}) async {
+    emit(ButtonLoadingState());
     try {
       Either result = await usecase.call(param: params);
       result.fold(
