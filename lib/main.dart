@@ -1,6 +1,10 @@
+import 'package:clean_architecture_poktani/common/bloc/auth/auth_state.dart';
+import 'package:clean_architecture_poktani/common/bloc/auth/auth_state_cubit.dart';
 import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/welcome.dart';
+import 'package:clean_architecture_poktani/features/main/presentation/pages/main_navigator_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   setupServiceLocator();
@@ -12,15 +16,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Poktani App',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        scaffoldBackgroundColor: Colors.white,
+    return BlocProvider(
+      create: (context) => AuthStateCubit()..appStarted(),
+      child: MaterialApp(
+        title: 'Poktani App',
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+          scaffoldBackgroundColor: Colors.white,
+        ),
+        home: BlocBuilder<AuthStateCubit, AuthState>(
+          builder: (context, state) {
+            if (state is Authenticated) {
+              return MainNavigatorPage();
+            }
+            if (state is UnAuthenticated) {
+              return WelcomePage();
+            }
+            return Container(); // example use for splash screen or loading state
+          },
+        ),
       ),
-      initialRoute: '/welcome',
-
-      routes: {"/welcome": (context) => const WelcomePage()},
     );
   }
 }

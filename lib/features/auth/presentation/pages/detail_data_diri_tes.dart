@@ -9,8 +9,6 @@ import 'package:clean_architecture_poktani/features/auth/presentation/pages/widg
 import 'package:clean_architecture_poktani/features/main/presentation/pages/main_navigator_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/web.dart';
-
 class DetailDataDiriPageTes extends StatelessWidget {
   final RegisterData registrationData;
 
