@@ -1,5 +1,8 @@
+import 'package:clean_architecture_poktani/common/bloc/auth/auth_state_cubit.dart';
+import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// This interceptor is used to show request and response logs
 class LoggerInterceptor extends Interceptor {
@@ -18,13 +21,33 @@ class LoggerInterceptor extends Interceptor {
       'SERVER RESPONSE: ${err.response?.data}',
     ); //Debug log
     handler.next(err); //Continue with the Error
+    if (err.response?.statusCode == 401) {
+      logger.w('Unauthorized request detected. Redirecting to login.');
+      sl<AuthStateCubit>()
+          .appStarted(); // Trigger appStarted to check login state
+    } else {
+      logger.w('An error occurred: ${err.message}');
+    }
   }
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  Future<void> onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    // 1. Ambil SharedPreferences
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    // 2. Cek apakah token ada
+    if (sharedPreferences.containsKey("access_token")) {
+      // 3. Ambil token dan tambahkan ke header
+      String? token = sharedPreferences.getString("access_token");
+      options.headers['Authorization'] = 'Bearer $token';
+    }
+
     final requestPath = '${options.baseUrl}${options.path}';
-    logger.i('${options.method} request ==> $requestPath'); //Info log
-    handler.next(options); // continue with the Request
+    logger.i('${options.method} request ==> $requestPath');
+    return super.onRequest(options, handler);
   }
 
   @override

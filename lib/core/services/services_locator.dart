@@ -1,3 +1,4 @@
+import 'package:clean_architecture_poktani/common/bloc/auth/auth_state_cubit.dart';
 import 'package:clean_architecture_poktani/core/network/dio_client.dart';
 import 'package:clean_architecture_poktani/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:clean_architecture_poktani/features/auth/data/source/auth_api_service.dart';
@@ -5,6 +6,9 @@ import 'package:clean_architecture_poktani/features/auth/data/source/auth_local_
 import 'package:clean_architecture_poktani/features/auth/domain/repository/auth_repository.dart';
 import 'package:clean_architecture_poktani/features/auth/domain/usecase/is_logged_in.dart';
 import 'package:clean_architecture_poktani/features/auth/domain/usecase/signup_usecases.dart';
+import 'package:clean_architecture_poktani/features/profile/data/repository/user_repository_impl.dart';
+import 'package:clean_architecture_poktani/features/profile/data/source/profile_api_service.dart';
+import 'package:clean_architecture_poktani/features/profile/domain/repository/user_repository.dart';
 import 'package:clean_architecture_poktani/features/profile/domain/usecase/get_user.dart';
 import 'package:get_it/get_it.dart';
 
@@ -16,12 +20,16 @@ void setupServiceLocator() {
   //services
   sl.registerSingleton<AuthApiService>(AuthApiServiceImpl());
   sl.registerSingleton<AuthLocalService>(AuthLocalServiceImpl());
+  sl.registerSingleton<ProfileApiService>(ProfileApiServiceImpl());
 
   //repositories
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
-
+  sl.registerSingleton<UserRepository>(UserRepositoryImpl());
   // usecases
   sl.registerSingleton<SignupUsecase>(SignupUsecase());
   sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
   sl.registerSingleton<GetUserUseCase>(GetUserUseCase());
+
+  // cubits
+  sl.registerSingleton<AuthStateCubit>(AuthStateCubit());
 }

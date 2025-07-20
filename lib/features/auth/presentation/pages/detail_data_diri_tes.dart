@@ -7,8 +7,10 @@ import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remot
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_auth_text_field.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button_final.dart';
 import 'package:clean_architecture_poktani/features/main/presentation/pages/main_navigator_page.dart';
+import 'package:clean_architecture_poktani/features/profile/presentation/pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 class DetailDataDiriPageTes extends StatelessWidget {
   final RegisterData registrationData;
 
@@ -27,9 +29,7 @@ class DetailDataDiriPageTes extends StatelessWidget {
             if (state is ButtonSuccessState) {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const MainNavigatorPage(),
-                ),
+                MaterialPageRoute(builder: (context) => const ProfilePage()),
               );
             }
             if (state is ButtonFailureState) {
@@ -101,6 +101,7 @@ class DetailDataDiriPageTes extends StatelessWidget {
             password_confirmation: registrationData.password_confirmation,
             phone_number: registrationData.phone_number,
             address: _alamatLengkapController.text,
+            email: '',
           ),
         );
       },

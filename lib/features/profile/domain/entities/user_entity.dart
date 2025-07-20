@@ -1,7 +1,7 @@
 class UserEntity {
   final int id;
   final String name;
-  final String email;
+  final String? email;
   final String phone_number;
   final String role;
   final String address;
@@ -12,6 +12,6 @@ class UserEntity {
     required this.email,
     required this.phone_number,
     required this.role,
-    required this.address,
+    this.address = '',
   });
 }

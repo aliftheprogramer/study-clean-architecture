@@ -139,16 +139,16 @@ class RegisterPage extends StatelessWidget {
             CustomSubmitAuthButton(
               label: "Selanjutnya",
               onPressed: () {
-                final String phone_number = _phoneNumberController.text;
+                final String phoneNumber = _phoneNumberController.text;
                 final String password = _passwordController.text;
-                final String password_confirmation =
+                final String passwordConfirmation =
                     _passwordConfirmationController.text;
 
                 context.read<RemoteRegisterBloc>().add(
                   RegisterButtonPressed(
-                    phoneNumber: phone_number,
+                    phoneNumber: phoneNumber,
                     password: password,
-                    passwordConfirmation: password_confirmation,
+                    passwordConfirmation: passwordConfirmation,
                   ),
                 );
               },

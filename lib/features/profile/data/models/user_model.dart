@@ -6,7 +6,7 @@ import 'package:clean_architecture_poktani/features/profile/domain/entities/user
 class UserModel {
   final int id;
   final String name;
-  final String email;
+  final String? email;
   final String phone_number;
   final String role;
   final String address;
@@ -34,7 +34,7 @@ class UserModel {
     return UserModel(
       id: map['id'] as int,
       name: map['name'] as String,
-      email: map['email'] as String,
+      email: map['email'] != null ? map['email'] as String : null,
       phone_number: map['phone_number'] as String,
       role: map['role'] as String,
       address: map['address'] as String,
