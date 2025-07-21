@@ -6,7 +6,6 @@ import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remot
 import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/final_register/button_state_cubit.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_auth_text_field.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button_final.dart';
-import 'package:clean_architecture_poktani/features/main/presentation/pages/main_navigator_page.dart';
 import 'package:clean_architecture_poktani/features/profile/presentation/pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

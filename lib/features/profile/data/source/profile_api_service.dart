@@ -3,11 +3,11 @@ import 'package:clean_architecture_poktani/core/network/dio_client.dart';
 import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ProfileApiService {
   Future<Either<String, Response>> getUser();
+  Future<void> logout();
 }
 
 class ProfileApiServiceImpl implements ProfileApiService {
@@ -17,7 +17,6 @@ class ProfileApiServiceImpl implements ProfileApiService {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       var token = sharedPreferences.getString('token');
-      Logger().i("Token: $token");
       var response = await sl<DioClient>().get(
         ApiUrls.userProfile,
         options: Options(
@@ -31,5 +30,11 @@ class ProfileApiServiceImpl implements ProfileApiService {
     } on DioException catch (e) {
       return Left(e.response?.data['message'] ?? 'An error occurred');
     }
+  }
+
+  @override
+  Future<void> logout() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.clear();
   }
 }

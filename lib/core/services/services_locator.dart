@@ -1,4 +1,4 @@
-import 'package:clean_architecture_poktani/common/bloc/auth/auth_state_cubit.dart';
+// import 'package:clean_architecture_poktani/common/bloc/auth/auth_state_cubit.dart';
 import 'package:clean_architecture_poktani/core/network/dio_client.dart';
 import 'package:clean_architecture_poktani/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:clean_architecture_poktani/features/auth/data/source/auth_api_service.dart';
@@ -10,6 +10,7 @@ import 'package:clean_architecture_poktani/features/profile/data/repository/user
 import 'package:clean_architecture_poktani/features/profile/data/source/profile_api_service.dart';
 import 'package:clean_architecture_poktani/features/profile/domain/repository/user_repository.dart';
 import 'package:clean_architecture_poktani/features/profile/domain/usecase/get_user.dart';
+import 'package:clean_architecture_poktani/features/profile/domain/usecase/logout.dart';
 import 'package:get_it/get_it.dart';
 
 final sl = GetIt.instance;
@@ -29,7 +30,5 @@ void setupServiceLocator() {
   sl.registerSingleton<SignupUsecase>(SignupUsecase());
   sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
   sl.registerSingleton<GetUserUseCase>(GetUserUseCase());
-
-  // cubits
-  sl.registerSingleton<AuthStateCubit>(AuthStateCubit());
+  sl.registerSingleton<LogoutUseCase>(LogoutUseCase());
 }

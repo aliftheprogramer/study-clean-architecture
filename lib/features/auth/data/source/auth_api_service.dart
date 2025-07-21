@@ -4,7 +4,6 @@ import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 import 'package:clean_architecture_poktani/features/auth/data/models/signup_req.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
 
 abstract class AuthApiService {
   Future<Either> signUp(SignupReqParams signUpReqParams);
@@ -18,7 +17,6 @@ class AuthApiServiceImpl extends AuthApiService {
         ApiUrls.register,
         data: signUpReqParams.toMap(),
       );
-      Logger().i('SignUp successful: ${response.data}');
 
       return Right(response);
     } on DioException catch (e) {

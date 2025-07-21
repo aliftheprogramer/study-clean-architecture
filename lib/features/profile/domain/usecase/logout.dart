@@ -3,9 +3,9 @@ import 'package:clean_architecture_poktani/core/usecases/usecase.dart';
 import 'package:clean_architecture_poktani/features/profile/domain/repository/user_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class GetUserUseCase implements Usecase {
+class LogoutUseCase implements Usecase {
   @override
-  Future call({dynamic param}) async {
-    return sl<UserRepository>().getUser();
+  Future<Either<String, void>> call({param}) async {
+    return await sl<UserRepository>().logout();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthLocalService {
@@ -10,6 +11,8 @@ class AuthLocalServiceImpl implements AuthLocalService {
   Future<bool> isLoggedIn() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token = sharedPreferences.containsKey("access_token");
+    Logger().i("Is user logged in? $token");
+    Logger().i("Access Token: ${sharedPreferences.getString("access_token")}");
     return token;
   }
 

@@ -27,4 +27,14 @@ class UserRepositoryImpl extends UserRepository {
       return Left(e.toString());
     }
   }
+
+  @override
+  Future<Either<String, void>> logout() async {
+    try {
+      await sl<ProfileApiService>().logout();
+      return const Right(null);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
 }
