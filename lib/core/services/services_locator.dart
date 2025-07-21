@@ -5,6 +5,7 @@ import 'package:clean_architecture_poktani/features/auth/data/source/auth_api_se
 import 'package:clean_architecture_poktani/features/auth/data/source/auth_local_service.dart';
 import 'package:clean_architecture_poktani/features/auth/domain/repository/auth_repository.dart';
 import 'package:clean_architecture_poktani/features/auth/domain/usecase/is_logged_in.dart';
+import 'package:clean_architecture_poktani/features/auth/domain/usecase/signin_usecases.dart';
 import 'package:clean_architecture_poktani/features/auth/domain/usecase/signup_usecases.dart';
 import 'package:clean_architecture_poktani/features/profile/data/repository/user_repository_impl.dart';
 import 'package:clean_architecture_poktani/features/profile/data/source/profile_api_service.dart';
@@ -31,4 +32,5 @@ void setupServiceLocator() {
   sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
   sl.registerSingleton<GetUserUseCase>(GetUserUseCase());
   sl.registerSingleton<LogoutUseCase>(LogoutUseCase());
+  sl.registerSingleton<SigninUsecases>(SigninUsecases());
 }

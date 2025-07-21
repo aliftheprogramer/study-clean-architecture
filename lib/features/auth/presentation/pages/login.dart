@@ -1,6 +1,14 @@
+import 'package:clean_architecture_poktani/core/services/services_locator.dart';
+import 'package:clean_architecture_poktani/features/auth/data/models/login_request_model.dart';
+import 'package:clean_architecture_poktani/features/auth/domain/usecase/signin_usecases.dart';
+import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/final_register/button_state_cubit.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_auth_text_field.dart';
-import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button.dart';
+import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button_final.dart';
+import 'package:clean_architecture_poktani/features/profile/presentation/pages/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../bloc/remote/final_register/button_state.dart';
 
 class LoginPages extends StatelessWidget {
   LoginPages({super.key});
@@ -11,7 +19,34 @@ class LoginPages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _buildBody(context));
+    return Scaffold(
+      body: BlocProvider(
+        create: (context) => ButtonStateCubit(),
+        child: BlocListener<ButtonStateCubit, ButtonState>(
+          listener: (context, state) {
+            if (state is ButtonSuccessState) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfilePage()),
+              );
+            }
+            if (state is ButtonFailureState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
+          child: Builder(
+            builder: (context) {
+              return _buildBody(context);
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildBody(BuildContext context) {
@@ -71,10 +106,16 @@ class LoginPages extends StatelessWidget {
             ),
 
             const SizedBox(height: 32),
-            CustomSubmitAuthButton(
+            CustomSubmitAuthButtonFinal(
               label: "Login",
               onPressed: () {
-                // Implement login logic here
+                context.read<ButtonStateCubit>().execute(
+                  usecase: sl<SigninUsecases>(),
+                  params: SignInReqParams(
+                    identifier: _phoneNumberController.text,
+                    password: _passwordController.text,
+                  ),
+                );
               },
             ),
           ],
