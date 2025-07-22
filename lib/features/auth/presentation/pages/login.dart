@@ -4,6 +4,7 @@ import 'package:clean_architecture_poktani/features/auth/domain/usecase/signin_u
 import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/final_register/button_state_cubit.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_auth_text_field.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button_final.dart';
+import 'package:clean_architecture_poktani/features/main/presentation/pages/pages_screen.dart';
 import 'package:clean_architecture_poktani/features/profile/presentation/pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +28,7 @@ class LoginPages extends StatelessWidget {
             if (state is ButtonSuccessState) {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const ProfilePage()),
+                MaterialPageRoute(builder: (context) => PagesScreen()),
               );
             }
             if (state is ButtonFailureState) {
