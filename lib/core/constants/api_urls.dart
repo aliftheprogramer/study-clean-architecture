@@ -4,4 +4,7 @@ class ApiUrls {
   static const login = "$baseUrl/auth/login";
   static const logout = "$baseUrl/auth/logout";
   static const userProfile = "$baseUrl/auth/me";
+
+  //field
+  static const listOfFields = "$baseUrl/field";
 }
