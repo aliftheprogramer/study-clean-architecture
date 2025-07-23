@@ -1,3 +1,4 @@
+import 'package:clean_architecture_poktani/features/field/presentation/list_field/pages/field_main.dart';
 import 'package:clean_architecture_poktani/features/home/presentation/pages/home_screen.dart';
 import 'package:clean_architecture_poktani/features/main/presentation/bloc/navigation_cubit.dart';
 import 'package:clean_architecture_poktani/features/profile/presentation/pages/profile.dart';
@@ -11,7 +12,7 @@ class PagesScreen extends StatelessWidget {
   final List<Widget> _pages = [
     HomeScreen(),
     Center(child: Text("Semai")),
-    Center(child: Text("Lahan")),
+    FieldMainPage(),
     Center(child: Text("Panen")),
     ProfilePage(),
   ];
