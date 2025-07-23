@@ -1,5 +1,7 @@
 import 'package:clean_architecture_poktani/features/home/presentation/bloc/field_card/field_card_cubit.dart';
 import 'package:clean_architecture_poktani/features/home/presentation/bloc/field_card/field_card_state.dart';
+import 'package:clean_architecture_poktani/features/home/presentation/bloc/hero/hero_cubit.dart';
+import 'package:clean_architecture_poktani/features/home/presentation/bloc/hero/hero_state.dart';
 import 'package:clean_architecture_poktani/features/home/presentation/pages/widget/field_card.dart';
 import 'package:clean_architecture_poktani/features/home/presentation/pages/widget/hero_card.dart';
 import 'package:flutter/material.dart';
@@ -8,34 +10,47 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   static const String userName = "John Doe";
-  static const List<String> heroImages = [
-    'assets/banner.png',
-    'assets/banner.png',
-    'assets/banner.png',
-  ];
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => FieldCardCubit()..loadFields(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => FieldCardCubit()..loadFields()),
+        BlocProvider(create: (context) => BannerHeroCubit()..loadBanners()),
+      ],
       child: _buildBody(context),
     );
   }
 
   Widget _buildBody(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _headerHome(context),
-            const SizedBox(height: 24),
-            _heroSection(context, HeroCard),
-            const SizedBox(height: 24),
-            _cardSection(context),
-          ],
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: _headerHome(context),
+                ),
+                const SizedBox(height: 24),
+                _heroSection(context),
+                const SizedBox(height: 24),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Text(
+                    "Lahan Anda",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                _cardSection(context),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -57,46 +72,97 @@ class HomeScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CircleAvatar(
-          radius: 24,
-          backgroundColor: Colors.blue,
-          child: Text(
-            getInitials(userName),
-            style: const TextStyle(color: Colors.white, fontSize: 20),
-          ),
-        ),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Selamat Datang",
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              "Selamat Datang,",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+                color: Colors.grey[600],
+              ),
             ),
             Text(
               userName,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
         ),
-        IconButton(
-          icon: const Icon(Icons.notifications),
-          onPressed: () {
-            // Handle notification button press
-          },
+        CircleAvatar(
+          radius: 24,
+          backgroundColor: Colors.green[100],
+          child: Text(
+            getInitials(userName),
+            style: const TextStyle(
+              color: Colors.green,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ],
     );
   }
 
-  Widget _heroSection(BuildContext context, dynamic widget) {
-    return SizedBox(
-      height: 200,
-      child: ListView.builder(
-        itemCount: heroImages.length,
-        itemBuilder: (context, index) {
-          final String imagePath = heroImages[index];
-          return HeroCard(imageUrl: imagePath);
-        },
-        scrollDirection: Axis.horizontal,
+  Widget _heroSection(BuildContext context) {
+    return BlocBuilder<BannerHeroCubit, HeroState>(
+      builder: (context, state) {
+        if (state is HeroLoadingState) {
+          return const SizedBox(
+            height: 200,
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (state is HeroErrorState) {
+          return Center(child: Text(state.errorMessage));
+        }
+        if (state is HeroLoadedState) {
+          return Column(
+            children: [
+              SizedBox(
+                height: 180,
+                child: PageView.builder(
+                  controller: PageController(viewportFraction: 0.9),
+                  itemCount: state.banners.length,
+                  onPageChanged: (index) {
+                    context.read<BannerHeroCubit>().changeBannerPage(index);
+                  },
+                  itemBuilder: (context, index) {
+                    final banner = state.banners[index];
+                    return HeroCard(imageUrl: banner.imageUrl);
+                  },
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(state.banners.length, (index) {
+                  return _buildIndicatorDot(
+                    isActive: index == state.currentIndex,
+                  );
+                }),
+              ),
+            ],
+          );
+        }
+        return const SizedBox(
+          height: 200,
+          child: Center(child: Text("No banners available")),
+        );
+      },
+    );
+  }
+
+  Widget _buildIndicatorDot({required bool isActive}) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      margin: const EdgeInsets.symmetric(horizontal: 4.0),
+      height: 8.0,
+      width: isActive ? 24.0 : 8.0,
+      decoration: BoxDecoration(
+        color: isActive ? Colors.green : Colors.grey[400],
+        borderRadius: BorderRadius.circular(12),
       ),
     );
   }
@@ -113,8 +179,9 @@ class HomeScreen extends StatelessWidget {
 
         if (state is FieldLoadedState) {
           return SizedBox(
-            height: 210, // Beri tinggi agar ListView tidak error
+            height: 210,
             child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               scrollDirection: Axis.horizontal,
               itemCount: state.fields.length,
               itemBuilder: (context, index) {
