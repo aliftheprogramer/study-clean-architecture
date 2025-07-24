@@ -1,5 +1,4 @@
 import 'package:clean_architecture_poktani/features/field/domain/entity/list_field_entity.dart';
-import 'package:clean_architecture_poktani/features/home/presentation/bloc/field_card/field_card_state.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class ListFieldState extends Equatable {
@@ -9,32 +8,34 @@ abstract class ListFieldState extends Equatable {
   List<Object?> get props => [];
 }
 
-class ListFieldInitialState extends ListFieldState {}
+class ListFieldInitial extends ListFieldState {}
 
-class ListFieldLoadingState extends ListFieldState {}
+class ListFieldLoading extends ListFieldState {}
 
-class ListFieldLoadedState extends ListFieldState {
+class ListFieldLoaded extends ListFieldState {
   final List<ListFieldEntity> fields;
+  final bool hasReachedMax;
 
-  const ListFieldLoadedState(this.fields);
+  const ListFieldLoaded({required this.fields, required this.hasReachedMax});
+
+  ListFieldLoaded copyWith({
+    List<ListFieldEntity>? fields,
+    bool? hasReachedMax,
+  }) {
+    return ListFieldLoaded(
+      fields: fields ?? this.fields,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+    );
+  }
 
   @override
-  List<Object?> get props => [fields];
+  List<Object?> get props => [fields, hasReachedMax];
 }
 
-class ListFieldErrorState extends ListFieldState {
+class ListFieldError extends ListFieldState {
   final String message;
 
-  const ListFieldErrorState(this.message);
-
-  @override
-  List<Object?> get props => [message];
-}
-
-class ListFieldEmptyState extends ListFieldState {
-  final String message;
-
-  const ListFieldEmptyState(this.message);
+  const ListFieldError(this.message);
 
   @override
   List<Object?> get props => [message];

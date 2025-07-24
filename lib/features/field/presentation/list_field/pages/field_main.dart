@@ -18,42 +18,62 @@ class FieldMainPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 1,
         foregroundColor: Colors.black87,
-        // Menengahkan judul
         centerTitle: true,
-        // Menambah tinggi AppBar untuk memberi jarak dari atas
         toolbarHeight: 80,
       ),
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (context) => ListFieldCubit()..loadListFields()),
-          // Add other providers if needed
-        ],
-        child: _buildBody(context),
+      body: BlocProvider(
+        create: (context) => ListFieldCubit()..loadListFields(),
+        child: _FieldListView(),
       ),
     );
   }
+}
 
-  Widget _buildBody(BuildContext context) {
+class _FieldListView extends StatefulWidget {
+  @override
+  State<_FieldListView> createState() => _FieldListViewState();
+}
+
+class _FieldListViewState extends State<_FieldListView> {
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      context.read<ListFieldCubit>().loadListFields();
+    }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<ListFieldCubit, ListFieldState>(
       builder: (context, state) {
-        // --- Loading State ---
-        if (state is ListFieldLoadingState || state is ListFieldInitialState) {
+        if (state is ListFieldInitial ||
+            (state is ListFieldLoading && state is! ListFieldLoaded)) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        // --- Loaded State ---
-        if (state is ListFieldLoadedState) {
-          return ListView.builder(
-            itemCount: state.fields.length,
-            itemBuilder: (context, index) {
-              final field = state.fields[index];
-              return ItemListField(listFieldEntity: field);
-            },
-          );
-        }
-
-        // --- Error State ---
-        if (state is ListFieldErrorState) {
+        if (state is ListFieldError) {
           return Center(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -66,21 +86,25 @@ class FieldMainPage extends StatelessWidget {
           );
         }
 
-        // --- Empty State ---
-        if (state is ListFieldEmptyState) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                state.message,
-                style: TextStyle(color: Colors.grey[600], fontSize: 16),
-                textAlign: TextAlign.center,
-              ),
-            ),
+        if (state is ListFieldLoaded) {
+          if (state.fields.isEmpty) {
+            return const Center(child: Text('Tidak ada data lahan.'));
+          }
+          return ListView.builder(
+            controller: _scrollController,
+            itemCount: state.hasReachedMax
+                ? state.fields.length
+                : state.fields.length + 1,
+            itemBuilder: (context, index) {
+              if (index >= state.fields.length) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              final field = state.fields[index];
+              return ItemListField(listFieldEntity: field);
+            },
           );
         }
 
-        // Fallback state
         return const Center(
           child: Text("Terjadi kesalahan yang tidak diketahui."),
         );

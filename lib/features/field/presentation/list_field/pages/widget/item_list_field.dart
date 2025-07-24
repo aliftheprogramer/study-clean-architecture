@@ -22,7 +22,7 @@ class ItemListField extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // --- Bagian Gambar ---
-            _buildImage(listFieldEntity.pictureUrl),
+            _buildImage(listFieldEntity.pictureUrl ?? 'assets/rawr.png'),
 
             // --- Bagian Konten ---
             Padding(
