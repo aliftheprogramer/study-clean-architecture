@@ -1,4 +1,4 @@
-import 'package:clean_architecture_poktani/core/network/map_dio_client.dart';
+import 'package:clean_architecture_poktani/features/field/data/source/map_dio_client.dart';
 import 'package:clean_architecture_poktani/core/resources/data_state.dart';
 import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 import 'package:clean_architecture_poktani/features/field/data/model/response/response_map_model.dart';

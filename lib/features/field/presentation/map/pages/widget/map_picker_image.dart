@@ -7,7 +7,8 @@ import 'package:latlong2/latlong.dart';
 
 // MapPickerPage tetap sama, tidak perlu diubah.
 class MapPickerPage extends StatelessWidget {
-  const MapPickerPage({super.key});
+  final LatLng initialLocation;
+  const MapPickerPage({super.key, required this.initialLocation});
 
   @override
   Widget build(BuildContext context) {
@@ -16,18 +17,16 @@ class MapPickerPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(title: const Text('Pilih Lokasi dari Peta')),
         // Body sekarang langsung memanggil widget stateless baru kita
-        body: MapPickerView(),
+        body: MapPickerView(initialLocation: initialLocation),
       ),
     );
   }
 }
 
-// ✅ WIDGET INI SEKARANG STATELESS
 class MapPickerView extends StatelessWidget {
-  MapPickerView({super.key});
+  final LatLng initialLocation;
+  MapPickerView({super.key, required this.initialLocation});
 
-  // MapController bisa dibuat di dalam build method karena tidak menyimpan
-  // state yang perlu dijaga antar-rebuild dalam kasus sederhana ini.
   final MapController _mapController = MapController();
 
   @override
@@ -52,7 +51,7 @@ class MapPickerView extends StatelessWidget {
             FlutterMap(
               mapController: _mapController,
               options: MapOptions(
-                initialCenter: const LatLng(-6.9175, 107.6191),
+                initialCenter: initialLocation,
                 initialZoom: 13.0,
                 onTap: (tapPosition, point) {
                   context.read<MapCubit>().getAddressFromTap(point);

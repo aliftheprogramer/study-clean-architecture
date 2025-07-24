@@ -1,6 +1,6 @@
 // import 'package:clean_architecture_poktani/common/bloc/auth/auth_state_cubit.dart';
 import 'package:clean_architecture_poktani/core/network/dio_client.dart';
-import 'package:clean_architecture_poktani/core/network/map_dio_client.dart';
+import 'package:clean_architecture_poktani/features/field/data/source/map_dio_client.dart';
 import 'package:clean_architecture_poktani/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:clean_architecture_poktani/features/auth/data/source/auth_api_service.dart';
 import 'package:clean_architecture_poktani/features/auth/data/source/auth_local_service.dart';
