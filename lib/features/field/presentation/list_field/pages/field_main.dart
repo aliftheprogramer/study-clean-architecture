@@ -1,3 +1,4 @@
+import 'package:clean_architecture_poktani/features/field/presentation/add_field/pages/add_field.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/list_field/bloc/field_cubit.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/list_field/bloc/field_state.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/list_field/pages/widget/item_list_field.dart';
@@ -22,54 +23,36 @@ class FieldMainPage extends StatelessWidget {
         toolbarHeight: 80,
       ),
       body: BlocProvider(
-        create: (context) => ListFieldCubit()..loadListFields(),
-        child: _FieldListView(),
+        // Cubit sekarang mengelola semuanya, termasuk pemanggilan data awal
+        create: (context) => ListFieldCubit(),
+        child: const _FieldListView(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => AddFieldPage()),
+          // );
+        },
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+        child: const Icon(Icons.add),
       ),
     );
   }
 }
 
-class _FieldListView extends StatefulWidget {
-  @override
-  State<_FieldListView> createState() => _FieldListViewState();
-}
-
-class _FieldListViewState extends State<_FieldListView> {
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_isBottom) {
-      context.read<ListFieldCubit>().loadListFields();
-    }
-  }
-
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
-  }
+class _FieldListView extends StatelessWidget {
+  const _FieldListView();
 
   @override
   Widget build(BuildContext context) {
+    // Ambil scroll controller langsung dari cubit
+    final scrollController = context.read<ListFieldCubit>().scrollController;
+
     return BlocBuilder<ListFieldCubit, ListFieldState>(
       builder: (context, state) {
-        if (state is ListFieldInitial ||
-            (state is ListFieldLoading && state is! ListFieldLoaded)) {
+        if (state is ListFieldInitial || state is ListFieldLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
@@ -91,23 +74,35 @@ class _FieldListViewState extends State<_FieldListView> {
             return const Center(child: Text('Tidak ada data lahan.'));
           }
           return ListView.builder(
-            controller: _scrollController,
+            controller: scrollController,
+
             itemCount: state.hasReachedMax
                 ? state.fields.length
                 : state.fields.length + 1,
             itemBuilder: (context, index) {
               if (index >= state.fields.length) {
-                return const Center(child: CircularProgressIndicator());
+                // Indikator loading di bawah list
+                return const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(child: CircularProgressIndicator()),
+                );
               }
               final field = state.fields[index];
-              return ItemListField(listFieldEntity: field);
+              return ItemListField(
+                pictureUrl: field.pictureUrl ?? 'assets/rawr.png',
+                soil_type: field.soilType ?? '',
+                sub_village: field.address?.sub_village ?? '',
+                name: field.name ?? '',
+                village: field.address?.village ?? '',
+                district: field.address?.district ?? '',
+                landArea: field.landArea?.toString() ?? '',
+                seedName: field.activeCrop?.seedName ?? '',
+              );
             },
           );
         }
 
-        return const Center(
-          child: Text("Terjadi kesalahan yang tidak diketahui."),
-        );
+        return const Center(child: Text("state kgk ada."));
       },
     );
   }

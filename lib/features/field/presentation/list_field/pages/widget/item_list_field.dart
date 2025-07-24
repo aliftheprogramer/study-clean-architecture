@@ -1,9 +1,29 @@
-import 'package:clean_architecture_poktani/features/field/domain/entity/list_field_entity.dart';
 import 'package:flutter/material.dart';
 
 class ItemListField extends StatelessWidget {
-  final ListFieldEntity listFieldEntity;
-  const ItemListField({super.key, required this.listFieldEntity});
+  final String name;
+
+  final String pictureUrl;
+  final String soil_type;
+
+  final String sub_village;
+  final String village;
+  final String district;
+
+  final String landArea;
+  final String seedName;
+
+  const ItemListField({
+    super.key,
+    required this.pictureUrl,
+    required this.soil_type,
+    required this.sub_village,
+    required this.name,
+    required this.village,
+    required this.district,
+    required this.landArea,
+    required this.seedName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +42,7 @@ class ItemListField extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // --- Bagian Gambar ---
-            _buildImage(listFieldEntity.pictureUrl ?? 'assets/rawr.png'),
+            _buildImage(pictureUrl),
 
             // --- Bagian Konten ---
             Padding(
@@ -32,7 +52,7 @@ class ItemListField extends StatelessWidget {
                 children: [
                   // --- Nama Lahan ---
                   Text(
-                    listFieldEntity.name,
+                    name ?? '',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
@@ -46,18 +66,17 @@ class ItemListField extends StatelessWidget {
                   // --- Detail Informasi dengan Ikon ---
                   _buildInfoRow(
                     icon: Icons.location_on_outlined,
-                    text:
-                        '${listFieldEntity.address.subVillage}, ${listFieldEntity.address.district}',
+                    text: '${sub_village}, ${village}, ${district}',
                   ),
                   const SizedBox(height: 6),
                   _buildInfoRow(
                     icon: Icons.straighten_outlined,
-                    text: '${listFieldEntity.landArea} m²',
+                    text: '${landArea} m²',
                   ),
                   const SizedBox(height: 6),
                   _buildInfoRow(
                     icon: Icons.energy_savings_leaf_outlined,
-                    text: 'Tanaman: ${listFieldEntity.activeCrop.seedName}',
+                    text: 'Tanaman: ${seedName}',
                   ),
                 ],
               ),

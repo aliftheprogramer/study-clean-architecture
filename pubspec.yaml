@@ -40,6 +40,9 @@ dependencies:
   dartz:
   toast: ^0.3.0
   lucide_icons: ^0.257.0
+  flutter_map: ^8.1.1
+  latlong2: ^0.9.1
+  geolocator: ^14.0.2
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +51,7 @@ dev_dependencies:
   retrofit_generator: ^9.2.0
   floor_generator: ^1.4.2
   build_runner: ^2.4.7
+  bloc_test: 
 
 
 flutter:

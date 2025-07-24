@@ -19,7 +19,6 @@ class ResponseListFieldsModel {
   factory ResponseListFieldsModel.fromMap(Map<String, dynamic> map) {
     return ResponseListFieldsModel(
       data: List<ListFieldModel>.from(
-        // Ubah dari List<int> menjadi List<dynamic> atau List
         (map['data'] as List).map<ListFieldModel>(
           (x) => ListFieldModel.fromMap(x as Map<String, dynamic>),
         ),
@@ -43,12 +42,12 @@ class ResponseListFieldsModel {
 
 class ListFieldModel {
   final int id;
-  final String name;
-  final int landArea;
-  final String pictureUrl;
-  final AddressModel address;
-  final String soilType;
-  final ActiveCropModel activeCrop;
+  final String? name;
+  final double? landArea;
+  final String? pictureUrl;
+  final AddressModel? address;
+  final String? soilType;
+  final ActiveCropModel? activeCrop;
 
   ListFieldModel({
     required this.id,
@@ -66,23 +65,27 @@ class ListFieldModel {
       'name': name,
       'landArea': landArea,
       'pictureUrl': pictureUrl,
-      'address': address.toMap(),
+      'address': address?.toMap(),
       'soilType': soilType,
-      'activeCrop': activeCrop.toMap(),
+      'activeCrop': activeCrop?.toMap(),
     };
   }
 
   factory ListFieldModel.fromMap(Map<String, dynamic> map) {
     return ListFieldModel(
       id: map['id'] as int,
-      name: map['name'] as String,
-      landArea: map['landArea'] as int,
-      pictureUrl: map['pictureUrl'] as String,
-      address: AddressModel.fromMap(map['address'] as Map<String, dynamic>),
-      soilType: map['soilType'] as String,
-      activeCrop: ActiveCropModel.fromMap(
-        map['activeCrop'] as Map<String, dynamic>,
-      ),
+      name: map['name'] != null ? map['name'] as String : null,
+      landArea: map['landArea'] != null ? map['landArea'] as double : null,
+      pictureUrl: map['pictureUrl'] != null
+          ? map['pictureUrl'] as String
+          : null,
+      address: map['address'] != null
+          ? AddressModel.fromMap(map['address'] as Map<String, dynamic>)
+          : null,
+      soilType: map['soilType'] != null ? map['soilType'] as String : null,
+      activeCrop: map['activeCrop'] != null
+          ? ActiveCropModel.fromMap(map['activeCrop'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -93,19 +96,19 @@ class ListFieldModel {
 }
 
 class AddressModel {
-  final String subVillage;
-  final String village;
+  final String? sub_village;
+  final String? village;
   final String district;
 
   AddressModel({
-    required this.subVillage,
+    required this.sub_village,
     required this.village,
     required this.district,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'subVillage': subVillage,
+      'sub_village': sub_village, // Perbaikan: Menghapus titik koma
       'village': village,
       'district': district,
     };
@@ -113,8 +116,12 @@ class AddressModel {
 
   factory AddressModel.fromMap(Map<String, dynamic> map) {
     return AddressModel(
-      subVillage: map['subVillage'] as String,
-      village: map['village'] as String,
+      sub_village:
+          map['sub_village'] !=
+              null // Perbaikan: Menghapus titik koma
+          ? map['sub_village'] as String
+          : null,
+      village: map['village'] != null ? map['village'] as String : null,
       district: map['district'] as String,
     );
   }
@@ -127,7 +134,7 @@ class AddressModel {
 
 class ActiveCropModel {
   final int id;
-  final String seedName;
+  final String? seedName;
 
   ActiveCropModel({required this.id, required this.seedName});
 
@@ -138,7 +145,7 @@ class ActiveCropModel {
   factory ActiveCropModel.fromMap(Map<String, dynamic> map) {
     return ActiveCropModel(
       id: map['id'] as int,
-      seedName: map['seedName'] as String,
+      seedName: map['seedName'] != null ? map['seedName'] as String : null,
     );
   }
 
@@ -149,8 +156,8 @@ class ActiveCropModel {
 }
 
 class PagingModel {
-  final String? has_next_page;
-  final String? has_prev_page;
+  final bool? has_next_page;
+  final bool? has_prev_page;
   final CursorsModel? cursors;
 
   PagingModel({this.has_next_page, this.has_prev_page, this.cursors});
@@ -166,10 +173,10 @@ class PagingModel {
   factory PagingModel.fromMap(Map<String, dynamic> map) {
     return PagingModel(
       has_next_page: map['has_next_page'] != null
-          ? map['has_next_page'] as String
+          ? map['has_next_page'] as bool
           : null,
       has_prev_page: map['has_prev_page'] != null
-          ? map['has_prev_page'] as String
+          ? map['has_prev_page'] as bool
           : null,
       cursors: map['cursors'] != null
           ? CursorsModel.fromMap(map['cursors'] as Map<String, dynamic>)

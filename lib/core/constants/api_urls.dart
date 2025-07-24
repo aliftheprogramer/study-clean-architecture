@@ -6,5 +6,6 @@ class ApiUrls {
   static const userProfile = "$baseUrl/auth/me";
 
   //field
-  static const listOfFields = "$baseUrl/field";
+  static const listOfFields = "$baseUrl/fields";
+  static const addField = "$baseUrl/fields";
 }

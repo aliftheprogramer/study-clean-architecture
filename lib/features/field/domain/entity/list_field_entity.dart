@@ -2,12 +2,12 @@ import 'package:equatable/equatable.dart';
 
 class ListFieldEntity extends Equatable {
   final int id;
-  final String name;
-  final int landArea;
-  final String pictureUrl;
-  final AddressEntity address;
-  final String soilType;
-  final ActiveCropEntity activeCrop;
+  final String? name;
+  final double? landArea;
+  final String? pictureUrl;
+  final AddressEntity? address;
+  final String? soilType;
+  final ActiveCropEntity? activeCrop;
 
   const ListFieldEntity({
     required this.id,
@@ -32,23 +32,23 @@ class ListFieldEntity extends Equatable {
 }
 
 class AddressEntity extends Equatable {
-  final String subVillage;
-  final String village;
-  final String district;
+  final String? sub_village;
+  final String? village;
+  final String? district;
 
   const AddressEntity({
-    required this.subVillage,
+    required this.sub_village,
     required this.village,
     required this.district,
   });
 
   @override
-  List<Object?> get props => [subVillage, village, district];
+  List<Object?> get props => [sub_village, village, district];
 }
 
 class ActiveCropEntity extends Equatable {
   final int id;
-  final String seedName;
+  final String? seedName;
 
   const ActiveCropEntity({required this.id, required this.seedName});
 
@@ -63,7 +63,7 @@ class ActiveCropEntity extends Equatable {
 //     landArea: 100,
 //     pictureUrl: "assets/placeholder.png", // Contoh dengan gambar
 //     address: AddressEntity(
-//       subVillage: "Panembahan",
+//       sub_village: "Panembahan",
 //       village: "Yogyakarta",
 //       district: "Kraton",
 //     ),
@@ -76,7 +76,7 @@ class ActiveCropEntity extends Equatable {
 //     landArea: 150,
 //     pictureUrl: "assets/placeholder.png", // Contoh tanpa gambar
 //     address: AddressEntity(
-//       subVillage: "Caturtunggal",
+//       sub_village: "Caturtunggal",
 //       village: "Sleman",
 //       district: "Depok",
 //     ),
@@ -89,7 +89,7 @@ class ActiveCropEntity extends Equatable {
 //     landArea: 75,
 //     pictureUrl: "assets/placeholder.png", // Contoh dengan gambar lain
 //     address: AddressEntity(
-//       subVillage: "Wirobrajan",
+//       sub_village: "Wirobrajan",
 //       village: "Yogyakarta",
 //       district: "Wirobrajan",
 //     ),
