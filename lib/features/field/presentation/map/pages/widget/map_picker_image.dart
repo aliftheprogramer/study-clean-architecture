@@ -14,10 +14,12 @@ class MapPickerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => MapCubit(),
-      child: Scaffold(
-        appBar: AppBar(title: const Text('Pilih Lokasi dari Peta')),
-        // Body sekarang langsung memanggil widget stateless baru kita
-        body: MapPickerView(initialLocation: initialLocation),
+      child: SizedBox(
+        height: 400, // Atur tinggi sesuai kebutuhan Anda
+        child: Scaffold(
+          appBar: AppBar(title: const Text('Pilih Lokasi dari Peta')),
+          body: MapPickerView(initialLocation: initialLocation),
+        ),
       ),
     );
   }

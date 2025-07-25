@@ -17,3 +17,11 @@ class InitialLocationLoaded extends InitialLocationState {
   @override
   List<Object?> get props => [initialLocation];
 }
+
+class InitialLocationFailure extends InitialLocationState {
+  final String message;
+  const InitialLocationFailure(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
