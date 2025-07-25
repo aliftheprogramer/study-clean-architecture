@@ -4,8 +4,8 @@ import 'package:clean_architecture_poktani/features/field/presentation/map/pages
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class InitialLoadingPage extends StatelessWidget {
-  const InitialLoadingPage({super.key});
+class InitialLocationPage extends StatelessWidget {
+  const InitialLocationPage({super.key});
 
   @override
   Widget build(BuildContext context) {

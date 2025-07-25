@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
               return PagesScreen();
             }
             if (state is UnAuthenticated) {
-              // return WelcomePage();
+              return WelcomePage();
               return InitialLoadingPage();
             }
             return Container(); // example use for splash screen or loading state
