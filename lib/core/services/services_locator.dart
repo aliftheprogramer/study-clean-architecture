@@ -1,5 +1,4 @@
 // import 'package:clean_architecture_poktani/common/bloc/auth/auth_state_cubit.dart';
-import 'package:clean_architecture_poktani/core/network/dio_client.dart';
 import 'package:clean_architecture_poktani/features/field/data/source/map_dio_client.dart';
 import 'package:clean_architecture_poktani/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:clean_architecture_poktani/features/auth/data/source/auth_api_service.dart';
@@ -51,7 +50,7 @@ void setupServiceLocator() {
   sl.registerSingleton<LogoutUseCase>(LogoutUseCase());
   sl.registerSingleton<SigninUsecases>(SigninUsecases());
   sl.registerSingleton<GetListFieldsUseCase>(GetListFieldsUseCase());
-  sl.registerSingleton<AddFieldUsecase>(AddFieldUsecase());
+  sl.registerSingleton<AddFieldUseCase>(AddFieldUseCase(sl<FieldRepository>()));
   sl.registerSingleton<GetAddressFromCoordinatesUseCase>(
     GetAddressFromCoordinatesUseCase(sl<GeocodingRepository>()),
   );

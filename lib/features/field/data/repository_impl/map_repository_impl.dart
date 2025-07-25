@@ -19,9 +19,7 @@ class GeocodingRepositoryImpl implements GeocodingRepository {
         lon: lon,
       );
       Logger().i(response);
-      // Parsing JSON ke Model
       final nominatimModel = NominatimResponseModel.fromMap(response.data);
-      // Konversi Model ke Entity
       Logger().i('Response data: ${response.data}');
       return DataSuccess(data: nominatimModel.toEntity());
     } on DioException catch (e) {
@@ -33,7 +31,6 @@ class GeocodingRepositoryImpl implements GeocodingRepository {
 extension on NominatimResponseModel {
   AddressDetailEntity toEntity() {
     return AddressDetailEntity(
-      // Pastikan ada nilai default jika data dari API null
       latitude: (lat ?? 0.0),
       longitude: (lon ?? 0.0),
       hamlet:

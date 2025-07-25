@@ -2,7 +2,7 @@ import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remot
 import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/start_register/remote_register_bloc.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/start_register/remote_register_event.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/detail_data_diri_tes.dart';
-import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_auth_text_field.dart';
+import 'package:clean_architecture_poktani/widget/custom_form_text_field.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,7 +88,7 @@ class RegisterPage extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            CustomAuthTextField(
+            CustomFormTextField(
               label: 'No HP',
               keyboardType: TextInputType.phone,
               isPassword: false,
@@ -102,7 +102,7 @@ class RegisterPage extends StatelessWidget {
             ValueListenableBuilder<bool>(
               valueListenable: _obscureTextModifier,
               builder: (context, isObsecure, child) {
-                return CustomAuthTextField(
+                return CustomFormTextField(
                   label: "Password",
                   keyboardType: TextInputType.text,
                   isPassword: true,
@@ -121,7 +121,7 @@ class RegisterPage extends StatelessWidget {
             ValueListenableBuilder<bool>(
               valueListenable: _obscureTextModifier,
               builder: (context, isObsecure, child) {
-                return CustomAuthTextField(
+                return CustomFormTextField(
                   label: "Konfirmasi Password",
                   keyboardType: TextInputType.text,
                   isPassword: true,

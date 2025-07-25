@@ -4,7 +4,7 @@ import 'package:clean_architecture_poktani/features/auth/domain/entities/request
 import 'package:clean_architecture_poktani/features/auth/domain/usecase/signup_usecases.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/final_register/button_state.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/final_register/button_state_cubit.dart';
-import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_auth_text_field.dart';
+import 'package:clean_architecture_poktani/widget/custom_form_text_field.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button_final.dart';
 import 'package:clean_architecture_poktani/features/profile/presentation/pages/profile.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +62,7 @@ class DetailDataDiriPageTes extends StatelessWidget {
               title: Text("Detail Data Diri"),
               backgroundColor: Colors.white,
             ),
-            CustomAuthTextField(
+            CustomFormTextField(
               label: "Nama Lengkap",
               keyboardType: TextInputType.text,
               isPassword: false,
@@ -71,7 +71,7 @@ class DetailDataDiriPageTes extends StatelessWidget {
               obsecureText: false,
             ),
             SizedBox(height: 16),
-            CustomAuthTextField(
+            CustomFormTextField(
               label: "Alamat Lengkap",
               keyboardType: TextInputType.text,
               isPassword: false,

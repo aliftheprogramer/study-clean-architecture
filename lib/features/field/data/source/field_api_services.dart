@@ -6,12 +6,16 @@ import 'package:clean_architecture_poktani/features/field/data/model/request/req
 import 'package:clean_architecture_poktani/features/field/data/model/response/response_add_fields_model.dart';
 import 'package:clean_architecture_poktani/features/field/data/model/response/response_list_fields_model.dart';
 import 'package:clean_architecture_poktani/features/field/domain/entity/request/request_add_field.dart';
+import 'package:clean_architecture_poktani/features/field/domain/entity/response/response_add_field.dart';
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class FieldApiServices {
   Future<DataState<ResponseListFieldsModel>> getFields({String? url});
-  Future<DataState<ResponseAddFieldsModel>> addField(AddFieldEntity field);
+  Future<DataState<ResponseAddFieldsModel>> addField(
+    AddFieldRequestModel field,
+  );
 }
 
 class FieldApiServicesImpl implements FieldApiServices {
@@ -42,33 +46,20 @@ class FieldApiServicesImpl implements FieldApiServices {
 
   @override
   Future<DataState<ResponseAddFieldsModel>> addField(
-    AddFieldEntity field, // 1. Ubah parameter menjadi AddFieldEntity
+    AddFieldRequestModel field,
   ) async {
     try {
-      // Buat objek Model dari Entity yang diterima
-      final model = AddFieldRequestModel.fromEntity(field);
-
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      var token = sharedPreferences.getString('token');
-
-      final response = await sl<DioClient>().post(
+      // Interceptor Anda sudah menangani token, jadi header manual bisa dihapus jika mau
+      var response = await sl<DioClient>().post(
         ApiUrls.addField,
-        data: model.toJson(), // Gunakan model yang sudah dikonversi ke JSON
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Accept': 'application/json',
-          },
-        ),
+        data: field.toJson(),
       );
 
-      // 2. Gunakan ResponseAddFieldsModel untuk mem-parsing data
       final fieldResponse = ResponseAddFieldsModel.fromMap(response.data);
-
-      // 3. Kembalikan DataSuccess dengan tipe yang benar
+      // KEMBALIKAN DataSuccess, BUKAN Right()
       return DataSuccess(data: fieldResponse);
     } on DioException catch (e) {
+      // KEMBALIKAN DataFailed, BUKAN Left()
       return DataFailed(e);
     }
   }

@@ -17,8 +17,13 @@ class FieldResponseEntity extends Equatable {
 class PagingEntity extends Equatable {
   final bool hasNextPage;
   final bool hasPrevPage;
+  final CursorsEntity? cursors;
 
-  const PagingEntity({required this.hasNextPage, required this.hasPrevPage});
+  const PagingEntity({
+    required this.hasNextPage,
+    required this.hasPrevPage,
+    this.cursors,
+  });
 
   @override
   List<Object?> get props => [hasNextPage, hasPrevPage];
@@ -30,6 +35,16 @@ class LinksEntity extends Equatable {
   final String? prev;
 
   const LinksEntity({this.next, this.prev});
+
+  @override
+  List<Object?> get props => [next, prev];
+}
+
+class CursorsEntity extends Equatable {
+  final String? next;
+  final String? prev;
+
+  const CursorsEntity({this.next, this.prev});
 
   @override
   List<Object?> get props => [next, prev];

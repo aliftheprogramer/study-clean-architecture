@@ -2,7 +2,7 @@ import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 import 'package:clean_architecture_poktani/features/auth/data/models/login_request_model.dart';
 import 'package:clean_architecture_poktani/features/auth/domain/usecase/signin_usecases.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/final_register/button_state_cubit.dart';
-import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_auth_text_field.dart';
+import 'package:clean_architecture_poktani/widget/custom_form_text_field.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button_final.dart';
 import 'package:clean_architecture_poktani/features/main/presentation/pages/pages_screen.dart';
 import 'package:clean_architecture_poktani/features/profile/presentation/pages/profile.dart';
@@ -78,7 +78,7 @@ class LoginPages extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            CustomAuthTextField(
+            CustomFormTextField(
               controller: _phoneNumberController,
               label: "No Hp",
               keyboardType: TextInputType.phone,
@@ -92,7 +92,7 @@ class LoginPages extends StatelessWidget {
             ValueListenableBuilder<bool>(
               valueListenable: _obscureTextModifier,
               builder: (context, isObsecure, child) {
-                return CustomAuthTextField(
+                return CustomFormTextField(
                   label: "Password",
                   keyboardType: TextInputType.text,
                   isPassword: true,

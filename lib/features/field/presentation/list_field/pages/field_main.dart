@@ -91,7 +91,7 @@ class _FieldListView extends StatelessWidget {
               return ItemListField(
                 pictureUrl: field.pictureUrl ?? 'assets/rawr.png',
                 soil_type: field.soilType ?? '',
-                sub_village: field.address?.sub_village ?? '',
+                sub_village: field.address?.subVillage ?? '',
                 name: field.name ?? '',
                 village: field.address?.village ?? '',
                 district: field.address?.district ?? '',

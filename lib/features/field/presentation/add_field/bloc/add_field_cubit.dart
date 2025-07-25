@@ -1,20 +1,35 @@
-// import 'package:clean_architecture_poktani/core/services/services_locator.dart';
-// import 'package:clean_architecture_poktani/features/field/data/model/request/request_add_field.dart';
-// import 'package:clean_architecture_poktani/features/field/domain/usecase/add_field_usecase.dart';
-// import 'package:clean_architecture_poktani/features/field/presentation/add_field/bloc/add_field_state.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:clean_architecture_poktani/features/field/domain/entity/request/request_add_field.dart';
+import 'package:clean_architecture_poktani/features/field/domain/usecase/add_field_usecase.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-// class AddFieldCubit extends Cubit<AddFieldState> {
-//   final AddFieldUsecase _addFieldUseCase = sl<AddFieldUsecase>();
+import 'add_field_state.dart';
 
-//   AddFieldCubit() : super(AddFieldInitial());
+class AddFieldCubit extends Cubit<AddFieldState> {
+  // Ganti nama variabel biar lebih jelas
+  final AddFieldUseCase _useCase;
 
-//   Future<void> addField(AddFieldRequestModel params) async {
-//     emit(AddFieldLoading());
-//     final result = await _addFieldUseCase(params);
-//     result.fold(
-//       (failure) => emit(AddFieldFailure(failure.message)),
-//       (field) => emit(AddFieldSuccess(field)),
-//     );
-//   }
-// }
+  AddFieldCubit(this._useCase) : super(AddFieldInitial());
+
+  Future<void> createField(AddFieldEntity params) async {
+    emit(AddFieldLoading());
+
+    // Panggil use case dengan parameter POSISIONAL, bukan NAMED
+    // Bukan _useCase(AddFieldEntity: params), tapi _useCase(params)
+    final result = await _useCase(params); // ✅ Ini yang bener
+
+    // Karena use case sudah benar (mengembalikan Either), .fold() PASTI BISA
+    result.fold(
+      (gagal) {
+        emit(
+          AddFieldFailure(
+            gagal.error?.message ?? 'Terjadi error tidak diketahui',
+          ),
+        );
+      },
+      (sukses) {
+        // State sukses Anda tidak butuh data, jadi kita panggil constructornya saja
+        emit(AddFieldSuccess());
+      },
+    );
+  }
+}

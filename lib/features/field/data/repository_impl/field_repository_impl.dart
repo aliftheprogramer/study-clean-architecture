@@ -9,7 +9,9 @@ import 'package:clean_architecture_poktani/features/field/domain/entity/request/
 import 'package:clean_architecture_poktani/features/field/domain/entity/response/response_add_field.dart';
 import 'package:clean_architecture_poktani/features/field/domain/entity/response/response_list_field.dart';
 import 'package:clean_architecture_poktani/features/field/domain/repository/field_repository.dart';
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FieldRepositoryImpl implements FieldRepository {
   @override
@@ -31,83 +33,33 @@ class FieldRepositoryImpl implements FieldRepository {
   }
 
   @override
-  Future<DataState<ResponseAddField>> addField(AddFieldEntity field) async {
+  Future<Either<DataFailed, ResponseAddField>> addField(
+    AddFieldEntity field,
+  ) async {
     try {
-      final response = await sl<FieldApiServices>().addField(field);
-      if (response.data != null) {
-        // Pola yang benar
-        return DataSuccess(
-          data: response.data!.toEntity(),
-        ); // Tambahkan "data:"
+      final fieldModel = AddFieldRequestModel.fromEntity(field);
+      final dataState = await sl<FieldApiServices>().addField(fieldModel);
+      if (dataState is DataSuccess && dataState.data != null) {
+        return Right(dataState.data!.toEntity());
       } else {
-        return DataFailed(
-          response.error ??
-              DioException(requestOptions: RequestOptions(path: '')),
-        );
+        return Left(DataFailed(dataState.error!));
       }
     } on DioException catch (e) {
-      return DataFailed(e);
+      return Left(DataFailed(e));
     }
-  }
-}
-
-extension on ResponseListFieldsModel {
-  FieldResponseEntity toEntity() {
-    return FieldResponseEntity(
-      fields: data.map((model) => model.toEntity()).toList(),
-      paging: paging?.toEntity(),
-      links: links?.toEntity(),
-    );
-  }
-}
-
-extension on ListFieldModel {
-  ListFieldEntity toEntity() {
-    return ListFieldEntity(
-      id: id,
-      name: name,
-      landArea: landArea,
-      pictureUrl: pictureUrl,
-      address: address?.toEntity(),
-      soilType: soilType ?? '',
-      activeCrop: activeCrop?.toEntity(),
-    );
-  }
-}
-
-extension on AddressModel {
-  AddressEntity toEntity() {
-    return AddressEntity(
-      village: village,
-      district: district,
-      sub_village: sub_village,
-    );
-  }
-}
-
-extension on ActiveCropModel {
-  ActiveCropEntity toEntity() {
-    return ActiveCropEntity(id: id, seedName: seedName);
-  }
-}
-
-extension on PagingModel {
-  PagingEntity toEntity() {
-    return PagingEntity(
-      hasNextPage: has_next_page ?? false,
-      hasPrevPage: has_prev_page ?? false,
-    );
-  }
-}
-
-extension on LinksModel {
-  LinksEntity toEntity() {
-    return LinksEntity(next: next, prev: prev);
   }
 }
 
 extension on ResponseAddFieldsModel {
   ResponseAddField toEntity() {
-    return ResponseAddField(data: data.toEntity());
+    return ResponseAddField(
+      id: this.id,
+      name: name,
+      landArea: land_area,
+      pictureUrl: 'rawr.png',
+      address: address.toEntity(),
+      soilType: soil_type,
+      activeCrop: active_crop?.toEntity(),
+    );
   }
 }

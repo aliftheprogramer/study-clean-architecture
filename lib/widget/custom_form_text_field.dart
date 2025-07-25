@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CustomAuthTextField extends StatelessWidget {
+class CustomFormTextField extends StatelessWidget {
   final String label;
   final TextInputType keyboardType;
   final bool isPassword;
@@ -11,7 +11,7 @@ class CustomAuthTextField extends StatelessWidget {
   final VoidCallback? onToggleObsecure;
   final bool isAlamat;
 
-  const CustomAuthTextField({
+  const CustomFormTextField({
     super.key,
     required this.label,
     required this.keyboardType,

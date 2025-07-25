@@ -1,6 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:clean_architecture_poktani/features/field/domain/entity/list_field_entity.dart';
+import 'package:clean_architecture_poktani/features/field/domain/entity/response/response_list_field.dart';
+
 class ResponseListFieldsModel {
   final List<ListFieldModel> data;
   final PagingModel? paging;
@@ -38,6 +41,14 @@ class ResponseListFieldsModel {
       ResponseListFieldsModel.fromMap(
         json.decode(source) as Map<String, dynamic>,
       );
+
+  FieldResponseEntity toEntity() {
+    return FieldResponseEntity(
+      fields: data.map((e) => e.toEntity()).toList(),
+      paging: paging?.toEntity(),
+      links: links?.toEntity(),
+    );
+  }
 }
 
 class ListFieldModel {
@@ -93,6 +104,18 @@ class ListFieldModel {
 
   factory ListFieldModel.fromJson(String source) =>
       ListFieldModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  ListFieldEntity toEntity() {
+    return ListFieldEntity(
+      id: id,
+      name: name,
+      landArea: landArea,
+      pictureUrl: pictureUrl,
+      address: address?.toEntity(),
+      soilType: soilType,
+      activeCrop: activeCrop?.toEntity(),
+    );
+  }
 }
 
 class AddressModel {
@@ -130,6 +153,14 @@ class AddressModel {
 
   factory AddressModel.fromJson(String source) =>
       AddressModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  AddressEntity toEntity() {
+    return AddressEntity(
+      subVillage: sub_village,
+      village: village,
+      district: district,
+    );
+  }
 }
 
 class ActiveCropModel {
@@ -153,6 +184,10 @@ class ActiveCropModel {
 
   factory ActiveCropModel.fromJson(String source) =>
       ActiveCropModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  ActiveCropEntity toEntity() {
+    return ActiveCropEntity(id: id, seedName: seedName);
+  }
 }
 
 class PagingModel {
@@ -184,6 +219,14 @@ class PagingModel {
     );
   }
 
+  PagingEntity toEntity() {
+    return PagingEntity(
+      hasNextPage: has_next_page ?? false,
+      hasPrevPage: has_prev_page ?? false,
+      cursors: cursors?.toEntity(),
+    );
+  }
+
   String toJson() => json.encode(toMap());
 
   factory PagingModel.fromJson(String source) =>
@@ -211,6 +254,9 @@ class LinksModel {
 
   factory LinksModel.fromJson(String source) =>
       LinksModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  LinksEntity toEntity() {
+    return LinksEntity(next: next, prev: prev);
+  }
 }
 
 class CursorsModel {
@@ -234,4 +280,8 @@ class CursorsModel {
 
   factory CursorsModel.fromJson(String source) =>
       CursorsModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  CursorsEntity toEntity() {
+    return CursorsEntity(next: next, prev: prev);
+  }
 }
