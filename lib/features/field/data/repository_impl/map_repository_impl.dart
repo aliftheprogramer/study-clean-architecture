@@ -36,11 +36,15 @@ extension on NominatimResponseModel {
       // Pastikan ada nilai default jika data dari API null
       latitude: (lat ?? 0.0),
       longitude: (lon ?? 0.0),
-      road: address?.road,
-      amenity: address?.amenity,
+      hamlet:
+          address?.hamlet ??
+          address?.hamlet ??
+          address?.suburb ??
+          address?.road ??
+          address?.village,
       village: address?.village,
-      subdistrict: address?.subdistrict,
-      city: address?.city,
+      city_district:
+          address?.suburb ?? address?.city_district ?? address?.municipality,
       state: address?.state,
     );
   }

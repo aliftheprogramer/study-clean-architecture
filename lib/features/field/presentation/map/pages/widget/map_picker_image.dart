@@ -101,10 +101,12 @@ class MapPickerView extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         // Gunakan data dari Entity yang sudah kita siapkan
-                        Text('Dusun: ${state.address.road ?? '-'}'),
+                        Text('Dusun: ${state.address.hamlet ?? '-'}'),
                         Text('Desa: ${state.address.village ?? '-'}'),
-                        Text('Kecamatan: ${state.address.subdistrict ?? '-'}'),
-                        Text('Kota: ${state.address.city ?? '-'}'),
+                        Text(
+                          'Kecamatan: ${state.address.city_district ?? '-'}',
+                        ),
+
                         const SizedBox(height: 8),
                         Text(
                           'Koordinat: ${state.selectedLocation.latitude.toStringAsFixed(5)}, ${state.selectedLocation.longitude.toStringAsFixed(5)}',
