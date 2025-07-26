@@ -1,5 +1,7 @@
 // import 'package:clean_architecture_poktani/common/bloc/auth/auth_state_cubit.dart';
-import 'package:clean_architecture_poktani/features/field/data/source/map_dio_client.dart';
+import 'package:clean_architecture_poktani/core/network/dio_client.dart';
+import 'package:clean_architecture_poktani/core/network/map_dio_lient.dart';
+import 'package:clean_architecture_poktani/features/field/data/source/geocoding_api_services.dart';
 import 'package:clean_architecture_poktani/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:clean_architecture_poktani/features/auth/data/source/auth_api_service.dart';
 import 'package:clean_architecture_poktani/features/auth/data/source/auth_local_service.dart';
@@ -26,16 +28,15 @@ import 'package:get_it/get_it.dart';
 final sl = GetIt.instance;
 
 void setupServiceLocator() {
-  sl.registerSingleton<Dio>(Dio(), instanceName: 'osmDio');
+  sl.registerSingleton<DioClient>(DioClient());
+  sl.registerSingleton<MapDioClient>(MapDioClient());
 
   //services
   sl.registerSingleton<AuthApiService>(AuthApiServiceImpl());
   sl.registerSingleton<AuthLocalService>(AuthLocalServiceImpl());
   sl.registerSingleton<ProfileApiService>(ProfileApiServiceImpl());
   sl.registerSingleton<FieldApiServices>(FieldApiServicesImpl());
-  sl.registerSingleton<GeocodingApiService>(
-    GeocodingApiServiceImpl(sl(instanceName: 'osmDio')),
-  );
+  sl.registerSingleton<GeocodingApiService>(GeocodingApiServiceImpl());
 
   //repositories
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());

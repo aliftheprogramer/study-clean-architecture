@@ -31,12 +31,10 @@ class MyApp extends StatelessWidget {
         home: BlocBuilder<AuthStateCubit, AuthState>(
           builder: (context, state) {
             if (state is Authenticated) {
-              // return ProfilePage();
               return PagesScreen();
             }
             if (state is UnAuthenticated) {
-              // return WelcomePage();
-              return AddFieldPage();
+              return WelcomePage();
             }
             return Container(); // example use for splash screen or loading state
           },

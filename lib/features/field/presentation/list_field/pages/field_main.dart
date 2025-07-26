@@ -29,10 +29,10 @@ class FieldMainPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => AddFieldPage()),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddFieldPage()),
+          );
         },
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,

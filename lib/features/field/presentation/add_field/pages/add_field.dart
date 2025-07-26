@@ -5,6 +5,7 @@ import 'package:clean_architecture_poktani/features/field/presentation/add_field
 import 'package:clean_architecture_poktani/features/field/presentation/add_field/widget/custom_soil_type_dropdown.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/map/bloc/initial_location_cubit.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/map/bloc/initial_location_state.dart';
+import 'package:clean_architecture_poktani/features/field/presentation/map/bloc/map_state.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/map/pages/initial_location_page.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/map/pages/widget/map_picker_image.dart';
 import 'package:clean_architecture_poktani/widget/custom_form_text_field.dart';
@@ -136,43 +137,67 @@ class AddFieldPage extends StatelessWidget {
               InitialLocationPage(
                 selectedLocation: currentLocation,
                 onTap: () async {
-                  // SEMUA LOGIKA NAVIGASI ADA DI SINI
-                  final tempLocationCubit = InitialLocationCubit()
-                    ..fetchInitialLocation();
+                  // STEP 1: TENTUKAN LOKASI UNTUK DIBUKA DI PETA
+                  LatLng? locationForMap;
 
-                  // Tunggu lokasi awal didapat
-                  final initialState = await tempLocationCubit.stream
-                      .firstWhere(
-                        (s) =>
-                            s is InitialLocationLoaded ||
-                            s is InitialLocationFailure,
-                      );
-                  tempLocationCubit.close();
+                  if (currentLocation != null) {
+                    // Jika sudah ada lokasi, pakai lokasi itu.
+                    locationForMap = currentLocation;
+                  } else {
+                    // Jika belum ada, coba dapatkan dari GPS.
+                    // Pengecekan 'context.mounted' untuk keamanan async
+                    if (!context.mounted) return;
+                    final tempLocationCubit = InitialLocationCubit()
+                      ..fetchInitialLocation();
+                    final initialState = await tempLocationCubit.stream
+                        .firstWhere(
+                          (s) =>
+                              s is InitialLocationLoaded ||
+                              s is InitialLocationFailure,
+                        );
+                    tempLocationCubit.close();
 
-                  if (initialState is InitialLocationLoaded) {
-                    // Buka MapPickerPage dan tunggu hasilnya (lokasi yg dipilih)
-                    final LatLng? result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => MapPickerPage(
-                          initialLocation: initialState.initialLocation,
+                    if (initialState is InitialLocationLoaded) {
+                      locationForMap = initialState.initialLocation;
+                    }
+                  }
+
+                  // JIKA SETELAH SEMUA USAHA LOKASI TETAP NULL (misal: GPS gagal),
+                  // TAMPILKAN PESAN DAN BERHENTI.
+                  if (locationForMap == null) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Gagal mendapatkan lokasi. Pastikan GPS aktif dan coba lagi.',
+                          ),
+                          backgroundColor: Colors.red,
                         ),
-                      ),
-                    );
-
-                    // Jika ada hasil, panggil cubit untuk update state
-                    if (result != null) {
-                      context.read<AddFieldCubit>().updateSelectedLocation(
-                        result,
                       );
                     }
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Gagal mendapatkan lokasi awal.'),
-                        backgroundColor: Colors.red,
-                      ),
+                    return; // Keluar dari fungsi
+                  }
+
+                  // STEP 2: SELALU BUKA PETA DENGAN LOKASI YANG SUDAH DITENTUKAN
+                  // Perintah navigasi ini sekarang ada di luar if/else, jadi akan selalu dijalankan.
+                  if (!context.mounted) return;
+                  final result = await Navigator.push<MapLoaded>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          MapPickerPage(initialLocation: locationForMap!),
+                    ),
+                  );
+
+                  // STEP 3: PROSES HASILNYA JIKA ADA
+                  if (result != null && context.mounted) {
+                    context.read<AddFieldCubit>().updateSelectedLocation(
+                      result.selectedLocation,
                     );
+                    _fieldDusunController.text = result.address.hamlet ?? '';
+                    _fieldDesaController.text = result.address.village ?? '';
+                    _fieldKecamatanController.text =
+                        result.address.city_district ?? '';
                   }
                 },
               ),

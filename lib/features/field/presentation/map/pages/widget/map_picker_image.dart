@@ -12,14 +12,11 @@ class MapPickerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => MapCubit(),
-      child: SizedBox(
-        height: 400, // Atur tinggi sesuai kebutuhan Anda
-        child: Scaffold(
-          appBar: AppBar(title: const Text('Pilih Lokasi dari Peta')),
-          body: MapPickerView(initialLocation: initialLocation),
-        ),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Pilih Lokasi dari Peta')),
+      body: BlocProvider(
+        create: (context) => MapCubit(),
+        child: SizedBox(child: MapPickerView(initialLocation: initialLocation)),
       ),
     );
   }
@@ -112,6 +109,27 @@ class MapPickerView extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text(
                           'Koordinat: ${state.selectedLocation.latitude.toStringAsFixed(5)}, ${state.selectedLocation.longitude.toStringAsFixed(5)}',
+                        ),
+
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            icon: const Icon(Icons.check_circle_outline),
+                            label: const Text("Gunakan Lokasi Ini"),
+                            onPressed: () {
+                              // Ini adalah fungsi utamanya:
+                              // Menutup halaman ini dan mengirim 'state' kembali
+                              // ke halaman sebelumnya (AddFieldPage).
+                              Navigator.of(context).pop(state);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green, // Warna tombol
+                              foregroundColor: Colors.white, // Warna teks
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              textStyle: const TextStyle(fontSize: 16),
+                            ),
+                          ),
                         ),
                       ],
                     ),

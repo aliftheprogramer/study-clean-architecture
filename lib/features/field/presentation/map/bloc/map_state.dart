@@ -1,7 +1,7 @@
 // lib/features/field/presentation/cubit/map_state.dart
 
 import 'package:equatable/equatable.dart';
-import 'package:clean_architecture_poktani/features/field/domain/entity/response/response_address_detail_entity.dart';
+import 'package:clean_architecture_poktani/features/field/domain/entity/response/field/response_address_detail_entity.dart';
 import 'package:latlong2/latlong.dart';
 
 abstract class MapState extends Equatable {

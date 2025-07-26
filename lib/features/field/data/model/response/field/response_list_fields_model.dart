@@ -1,8 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:clean_architecture_poktani/features/field/domain/entity/list_field_entity.dart';
-import 'package:clean_architecture_poktani/features/field/domain/entity/response/response_list_field.dart';
+import 'package:clean_architecture_poktani/features/field/domain/entity/response/field/response_list_field.dart';
 
 class ResponseListFieldsModel {
   final List<ListFieldModel> data;

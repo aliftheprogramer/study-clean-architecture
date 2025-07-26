@@ -26,12 +26,12 @@ class AddFieldCubit extends Cubit<AddFieldState> {
         ),
       );
 
-  Future<void> createField(AddFieldEntity params) async {
+  Future<void> createField(AddFieldEntity? params) async {
     emit(AddFieldLoading());
 
     // Panggil use case dengan parameter POSISIONAL, bukan NAMED
     // Bukan _useCase(AddFieldEntity: params), tapi _useCase(params)
-    final result = await _useCase(params); // ✅ Ini yang bener
+    final result = await _useCase(param: params); // ✅ Ini yang bener
 
     // Karena use case sudah benar (mengembalikan Either), .fold() PASTI BISA
     result.fold(
