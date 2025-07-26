@@ -55,8 +55,11 @@ class FieldApiServicesImpl implements FieldApiServices {
         data: field.toJson(),
       );
 
-      final fieldResponse = ResponseAddFieldsModel.fromMap(response.data);
-      // KEMBALIKAN DataSuccess, BUKAN Right()
+      final dataJson = response.data['data'] as Map<String, dynamic>;
+
+      // 2. Parsing objek "data" tersebut menjadi model
+      final fieldResponse = ResponseAddFieldsModel.fromMap(dataJson);
+
       return DataSuccess(data: fieldResponse);
     } on DioException catch (e) {
       // KEMBALIKAN DataFailed, BUKAN Left()

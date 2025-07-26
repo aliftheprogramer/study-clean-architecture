@@ -204,15 +204,11 @@ class AddFieldPage extends StatelessWidget {
               InitialLocationPage(
                 selectedLocation: currentLocation,
                 onTap: () async {
-                  // STEP 1: TENTUKAN LOKASI UNTUK DIBUKA DI PETA
                   LatLng? locationForMap;
-
                   if (currentLocation != null) {
-                    // Jika sudah ada lokasi, pakai lokasi itu.
                     locationForMap = currentLocation;
                   } else {
-                    // Jika belum ada, coba dapatkan dari GPS.
-                    // Pengecekan 'context.mounted' untuk keamanan async
+ 
                     if (!context.mounted) return;
                     final tempLocationCubit = InitialLocationCubit()
                       ..fetchInitialLocation();
@@ -258,10 +254,18 @@ class AddFieldPage extends StatelessWidget {
                     context.read<AddFieldCubit>().updateSelectedLocation(
                       result.selectedLocation,
                     );
-                    _fieldDusunController.text = result.address.hamlet ?? '';
-                    _fieldDesaController.text = result.address.village ?? '';
+                    final address = result.address;
+                    final location = result.selectedLocation;
+                    _fieldDusunController.text = address.hamlet ?? '';
+                    _fieldDesaController.text = address.village ?? '';
                     _fieldKecamatanController.text =
-                        result.address.city_district ?? '';
+                        address.city_district ?? '';
+                    context.read<AddFieldCubit>().locationChanged(
+                      location: location,
+                      subVillage: address.hamlet ?? '',
+                      village: address.village ?? '',
+                      district: address.city_district ?? '',
+                    );
                   }
                 },
               ),
