@@ -37,7 +37,7 @@ class ResponseSoilTypeModel {
   factory ResponseSoilTypeModel.fromMap(Map<String, dynamic> map) {
     return ResponseSoilTypeModel(
       data: List<SoilTypeModel>.from(
-        (map['data'] as List<int>).map<SoilTypeModel>(
+        (map['data'] as List<dynamic>).map<SoilTypeModel>(
           (x) => SoilTypeModel.fromMap(x as Map<String, dynamic>),
         ),
       ),

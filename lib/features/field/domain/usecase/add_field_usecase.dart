@@ -9,9 +9,10 @@ import 'package:dio/dio.dart';
 import '../repository/field_repository.dart';
 
 class AddFieldUseCase
-    implements Usecase<Either<DataFailed, ResponseAddField>, AddFieldEntity> {
+    implements
+        Usecase<Either<DataFailed, ResponseAddFieldEntity>, AddFieldEntity> {
   @override
-  Future<Either<DataFailed, ResponseAddField>> call({
+  Future<Either<DataFailed, ResponseAddFieldEntity>> call({
     AddFieldEntity? param,
   }) async {
     return await sl<FieldRepository>().addField(param!);

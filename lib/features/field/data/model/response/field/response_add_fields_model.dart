@@ -2,57 +2,73 @@
 import 'dart:convert';
 
 import 'package:clean_architecture_poktani/features/field/domain/entity/list_field_entity.dart';
+import 'package:clean_architecture_poktani/features/field/domain/entity/response/field/response_add_field.dart';
 
+// ===== Model Utama =====
 class ResponseAddFieldsModel {
   final int id;
   final String name;
-  final double land_area;
+  final double landArea;
+  final String? pictureUrl; // <-- 1. TAMBAHKAN PROPERTI INI
   final AddressModel address;
-  final String soil_type;
-  final ActiveCropModel? active_crop;
+  final String soilType;
+  final ActiveCropModel? activeCrop;
 
   ResponseAddFieldsModel({
     required this.id,
     required this.name,
-    required this.land_area,
+    required this.landArea,
+    required this.pictureUrl, // <-- 2. TAMBAHKAN DI CONSTRUCTOR
     required this.address,
-    required this.soil_type,
-    this.active_crop,
+    required this.soilType,
+    this.activeCrop,
   });
 
-  String toJson() => json.encode(toMap());
-
+  // `toMap` menerjemahkan camelCase Dart ke snake_case JSON
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
       'name': name,
-      'land_area': land_area,
+      'land_area': landArea,
       'address': address.toMap(),
-      'soil_type': soil_type,
-      'active_crop': active_crop?.toMap(),
+      'soil_type': soilType,
+      'active_crop': activeCrop?.toMap(),
     };
   }
 
+  // `fromMap` menerjemahkan snake_case JSON ke camelCase Dart
   factory ResponseAddFieldsModel.fromMap(Map<String, dynamic> map) {
     return ResponseAddFieldsModel(
       id: map['id'] as int,
       name: map['name'] as String,
-      land_area: map['land_area'] as double,
+      landArea: (map['land_area'] as num).toDouble(),
+      pictureUrl: map['picture_url'] as String?, // <-- 3. BACA DARI JSON
       address: AddressModel.fromMap(map['address'] as Map<String, dynamic>),
-      soil_type: map['soil_type'] as String,
-      active_crop: map['active_crop'] != null
+      soilType: map['soil_type'] as String,
+      activeCrop: map['active_crop'] != null
           ? ActiveCropModel.fromMap(map['active_crop'] as Map<String, dynamic>)
           : null,
     );
   }
 
-  factory ResponseAddFieldsModel.fromJson(String source) =>
-      ResponseAddFieldsModel.fromMap(
-        json.decode(source) as Map<String, dynamic>,
-      );
+  // Method untuk konversi ke Entity di Domain Layer
+  // ... di dalam kelas ResponseAddFieldsModel
+  ResponseAddFieldEntity toEntity() {
+    return ResponseAddFieldEntity(
+      id: id,
+      name: name,
+      landArea: landArea,
+      pictureUrl: pictureUrl, // <-- GUNAKAN DATA ASLI, BUKAN STRING KOSONG
+      address: address.toEntity(),
+      soilType: soilType,
+      activeCrop: activeCrop?.toEntity(),
+    );
+  }
 }
 
+// ===== Model Alamat (Nested) =====
 class AddressModel {
+  // Properti sudah benar (camelCase)
   final String subVillage;
   final String village;
   final String district;
@@ -63,62 +79,55 @@ class AddressModel {
     required this.district,
   });
 
-  factory AddressModel.fromJson(Map<String, dynamic> json) => AddressModel(
-    subVillage: json["sub_village"],
-    village: json["village"],
-    district: json["district"],
-  );
-
+  // `toMap` harus menghasilkan snake_case
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'subVillage': subVillage,
+      'sub_village': subVillage,
       'village': village,
       'district': district,
     };
   }
 
-  AddressEntity toEntity() {
-    return AddressEntity(
-      subVillage: this.subVillage,
-      village: this.village,
-      district: this.district,
-    );
-  }
-
+  // `fromMap` harus membaca snake_case dari JSON
   factory AddressModel.fromMap(Map<String, dynamic> map) {
     return AddressModel(
-      subVillage: map['subVillage'] as String,
+      subVillage: map['sub_village'] as String,
       village: map['village'] as String,
       district: map['district'] as String,
     );
   }
 
-  String toJson() => json.encode(toMap());
+  AddressEntity toEntity() {
+    return AddressEntity(
+      subVillage: subVillage,
+      village: village,
+      district: district,
+    );
+  }
 }
 
+// ===== Model Tanaman Aktif (Nested & Nullable) =====
 class ActiveCropModel {
+  // Gunakan camelCase untuk properti di Dart
   final int id;
-  final String seed_name;
+  final String seedName;
 
-  ActiveCropModel({required this.id, required this.seed_name});
+  ActiveCropModel({required this.id, required this.seedName});
 
-  factory ActiveCropModel.fromJson(Map<String, dynamic> json) =>
-      ActiveCropModel(id: json["id"], seed_name: json["seed_name"]);
-
+  // `toMap` menghasilkan snake_case
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{'id': id, 'seed_name': seed_name};
+    return <String, dynamic>{'id': id, 'seed_name': seedName};
   }
 
-  ActiveCropEntity toEntity() {
-    return ActiveCropEntity(id: id, seedName: seed_name);
-  }
-
+  // `fromMap` membaca snake_case
   factory ActiveCropModel.fromMap(Map<String, dynamic> map) {
     return ActiveCropModel(
       id: map['id'] as int,
-      seed_name: map['seed_name'] as String,
+      seedName: map['seed_name'] as String,
     );
   }
 
-  String toJson() => json.encode(toMap());
+  ActiveCropEntity toEntity() {
+    return ActiveCropEntity(id: id, seedName: seedName);
+  }
 }

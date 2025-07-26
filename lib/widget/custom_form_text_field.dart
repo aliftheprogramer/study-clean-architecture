@@ -3,28 +3,37 @@ import 'package:flutter/services.dart';
 
 class CustomFormTextField extends StatelessWidget {
   final String label;
-  final TextInputType keyboardType;
+  final TextEditingController controller;
   final bool isPassword;
   final bool isNumber;
-  final TextEditingController controller;
   final bool obsecureText;
+  final TextInputType? keyboardType;
   final VoidCallback? onToggleObsecure;
   final bool isAlamat;
+  final bool isShowList;
+  final VoidCallback? onTap;
+
+  // 1. TAMBAHKAN PARAMETER INI
+  final ValueChanged<String>? onChanged;
 
   const CustomFormTextField({
     super.key,
     required this.label,
-    required this.keyboardType,
-    required this.isPassword,
-    required this.isNumber,
     required this.controller,
-    required this.obsecureText,
+    this.isPassword = false, // Beri nilai default
+    this.isNumber = false, // Beri nilai default
+    this.obsecureText = false, // Beri nilai default
+    this.keyboardType,
     this.onToggleObsecure,
     this.isAlamat = false,
+    this.isShowList = false,
+    this.onTap,
+    this.onChanged, // 2. TAMBAHKAN DI CONSTRUCTOR
   });
 
   @override
   Widget build(BuildContext context) {
+    final bool isTappable = onTap != null;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,11 +41,12 @@ class CustomFormTextField extends StatelessWidget {
         Text(
           label,
           textAlign: TextAlign.left,
-          style: TextStyle(color: Colors.black, fontSize: 16),
+          style: const TextStyle(color: Colors.black, fontSize: 16),
         ),
         const SizedBox(height: 8),
         TextField(
           controller: controller,
+          onChanged: onChanged, // 3. SAMBUNGKAN KE TEXTFIELD
           keyboardType: isAlamat
               ? TextInputType.multiline
               : (isNumber ? TextInputType.number : keyboardType),
@@ -65,6 +75,8 @@ class CustomFormTextField extends StatelessWidget {
                   )
                 : null,
           ),
+          onTap: onTap,
+          readOnly: isTappable,
         ),
       ],
     );

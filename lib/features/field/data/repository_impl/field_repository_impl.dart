@@ -33,33 +33,49 @@ class FieldRepositoryImpl implements FieldRepository {
   }
 
   @override
-  Future<Either<DataFailed, ResponseAddField>> addField(
+  Future<Either<DataFailed, ResponseAddFieldEntity>> addField(
     AddFieldEntity field,
   ) async {
     try {
-      final fieldModel = AddFieldRequestModel.fromEntity(field);
-      final dataState = await sl<FieldApiServices>().addField(fieldModel);
-      if (dataState is DataSuccess && dataState.data != null) {
-        return Right(dataState.data!.toEntity());
+      // 1. Dapatkan respons mentah (raw http response) dari API Service
+      final httpResponse = await sl<FieldApiServices>().addField(
+        AddFieldRequestModel.fromEntity(field),
+      );
+
+      // 2. Cek jika body respons tidak null
+      if (httpResponse.data != null) {
+        // 3. Buka "kotak" JSON dan ambil nested object 'data'
+        final dataJson = httpResponse.data as Map<String, dynamic>;
+
+        // 4. Parsing nested object itu menjadi Model kita
+        final resultModel = ResponseAddFieldsModel.fromMap(dataJson);
+
+        // 5. Ubah Model ke Entity dan return sebagai tanda sukses (Right)
+        return Right(resultModel.toEntity());
       } else {
-        return Left(DataFailed(dataState.error!));
+        // Handle jika respons dari server tidak memiliki body/data
+        return Left(
+          DataFailed(
+            DioException(
+              requestOptions: RequestOptions(path: ''),
+              message: 'Respons dari server kosong.',
+            ),
+          ),
+        );
       }
     } on DioException catch (e) {
+      // Handle jika ada error dari Dio (jaringan, status code 4xx/5xx)
       return Left(DataFailed(e));
+    } catch (e) {
+      // Handle jika ada error lain (misalnya, parsing gagal)
+      return Left(
+        DataFailed(
+          DioException(
+            requestOptions: RequestOptions(path: ''),
+            message: 'Terjadi kesalahan tidak dikenal: $e',
+          ),
+        ),
+      );
     }
-  }
-}
-
-extension on ResponseAddFieldsModel {
-  ResponseAddField toEntity() {
-    return ResponseAddField(
-      id: this.id,
-      name: name,
-      landArea: land_area,
-      pictureUrl: 'rawr.png',
-      address: address.toEntity(),
-      soilType: soil_type,
-      activeCrop: active_crop?.toEntity(),
-    );
   }
 }

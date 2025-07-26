@@ -6,5 +6,7 @@ import 'package:dartz/dartz.dart';
 
 abstract class FieldRepository {
   Future<DataState<FieldResponseEntity>> getFields({String? url});
-  Future<Either<DataFailed, ResponseAddField>> addField(AddFieldEntity field);
+  Future<Either<DataFailed, ResponseAddFieldEntity>> addField(
+    AddFieldEntity field,
+  );
 }
