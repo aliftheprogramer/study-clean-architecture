@@ -21,6 +21,10 @@ import 'package:clean_architecture_poktani/features/field/domain/usecase/add_fie
 import 'package:clean_architecture_poktani/features/field/domain/usecase/field_usecase.dart';
 import 'package:clean_architecture_poktani/features/field/domain/usecase/get_soil_type_usecase.dart';
 import 'package:clean_architecture_poktani/features/field/domain/usecase/map_usecase.dart';
+import 'package:clean_architecture_poktani/features/home/data/repository_impl/home_repository_impl.dart';
+import 'package:clean_architecture_poktani/features/home/data/source/home_api_services.dart';
+import 'package:clean_architecture_poktani/features/home/domain/repository/home_repositoy.dart';
+import 'package:clean_architecture_poktani/features/home/domain/usecase/home_get_list_fields_use_case.dart';
 import 'package:clean_architecture_poktani/features/profile/data/repository/user_repository_impl.dart';
 import 'package:clean_architecture_poktani/features/profile/data/source/profile_api_service.dart';
 import 'package:clean_architecture_poktani/features/profile/domain/repository/user_repository.dart';
@@ -41,6 +45,7 @@ void setupServiceLocator() {
   sl.registerSingleton<FieldApiServices>(FieldApiServicesImpl());
   sl.registerSingleton<GeocodingApiService>(GeocodingApiServiceImpl());
   sl.registerSingleton<SoilTypeApiServices>(SoilTypeApiServicesImpl());
+  sl.registerSingleton<HomeApiServices>(HomeApiServicesImpl());
 
   //repositories
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
@@ -48,6 +53,7 @@ void setupServiceLocator() {
   sl.registerSingleton<FieldRepository>(FieldRepositoryImpl());
   sl.registerSingleton<GeocodingRepository>(GeocodingRepositoryImpl());
   sl.registerSingleton<SoilTypeRepository>(SoilTypeRepositoryImpl());
+  sl.registerSingleton<HomeRepository>(HomeRepositoryImpl());
 
   // usecases
   sl.registerSingleton<SignupUsecase>(SignupUsecase());
@@ -61,4 +67,6 @@ void setupServiceLocator() {
     GetAddressFromCoordinatesUseCase(sl<GeocodingRepository>()),
   );
   sl.registerSingleton<GetSoilTypeUsecase>(GetSoilTypeUsecase());
+
+  sl.registerSingleton<HomeGetListFieldsUseCase>(HomeGetListFieldsUseCase());
 }
