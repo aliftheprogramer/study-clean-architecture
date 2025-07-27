@@ -54,6 +54,7 @@ class AddFieldPage extends StatelessWidget {
           builder: (context, state) {
             LatLng? currentLocation;
             if (state is AddFieldInitial) {
+              // ignore: unnecessary_type_check
               final currentState = state is AddFieldInitial
                   ? state
                   : const AddFieldInitial();

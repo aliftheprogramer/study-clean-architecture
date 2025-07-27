@@ -1,7 +1,6 @@
 import 'package:clean_architecture_poktani/core/network/map_dio_lient.dart';
 import 'package:dio/dio.dart';
 import 'package:clean_architecture_poktani/core/services/services_locator.dart'; // <-- IMPORT GetIt
-import 'package:clean_architecture_poktani/features/field/data/source/geocoding_api_services.dart'; // <-- IMPORT client baru kita
 
 // Kelas abstrak (kontrak) tidak perlu diubah
 abstract class GeocodingApiService {

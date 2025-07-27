@@ -52,7 +52,7 @@ class ItemListField extends StatelessWidget {
                 children: [
                   // --- Nama Lahan ---
                   Text(
-                    name ?? '',
+                    name,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
