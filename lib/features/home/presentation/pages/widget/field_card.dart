@@ -2,7 +2,7 @@ import 'package:clean_architecture_poktani/features/home/domain/entity/field.dar
 import 'package:flutter/material.dart';
 
 class FieldCard extends StatelessWidget {
-  final Field field;
+  final ItemFieldHomeEntity field;
   const FieldCard({super.key, required this.field});
 
   @override
@@ -18,7 +18,7 @@ class FieldCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image(
-              image: AssetImage(field.picture_url ?? ''),
+              image: AssetImage(field.pictureUrl ?? 'assets/rawr.png'),
               height: 120,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -37,7 +37,7 @@ class FieldCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    field.active_crop.seed_name,
+                    field.activeCrop?.seedName ?? 'Tidak ada tanaman',
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                 ],

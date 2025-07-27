@@ -13,9 +13,13 @@ class FieldInitialState extends FieldCardState {}
 class FieldLoadingState extends FieldCardState {}
 
 class FieldLoadedState extends FieldCardState {
-  final List<Field> fields;
+  final List<ItemFieldHomeEntity> fields;
 
   const FieldLoadedState(this.fields);
+
+  FieldLoadedState copyWith({List<ItemFieldHomeEntity>? fields}) {
+    return FieldLoadedState(fields ?? this.fields);
+  }
 
   @override
   List<Object?> get props => [fields];
