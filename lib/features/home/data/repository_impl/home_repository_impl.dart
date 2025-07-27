@@ -7,8 +7,10 @@ import 'package:dio/dio.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
   @override
-  Future<DataState<ResponseListFieldHomeEntity>> getFields() async {
-    final httpResponse = await sl<HomeApiServices>().getFields();
+  Future<DataState<ResponseListFieldHomeEntity>> getFields({
+    String? url,
+  }) async {
+    final httpResponse = await sl<HomeApiServices>().getFields(url: url);
 
     if (httpResponse.data != null) {
       return DataSuccess(data: httpResponse.data!.toEntity());

@@ -14,11 +14,18 @@ class FieldLoadingState extends FieldCardState {}
 
 class FieldLoadedState extends FieldCardState {
   final List<ItemFieldHomeEntity> fields;
+  final bool hasReachedMax;
 
-  const FieldLoadedState(this.fields);
+  const FieldLoadedState(this.fields, {this.hasReachedMax = false});
 
-  FieldLoadedState copyWith({List<ItemFieldHomeEntity>? fields}) {
-    return FieldLoadedState(fields ?? this.fields);
+  FieldLoadedState copyWith({
+    List<ItemFieldHomeEntity>? fields,
+    bool? hasReachedMax,
+  }) {
+    return FieldLoadedState(
+      fields ?? this.fields,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+    );
   }
 
   @override

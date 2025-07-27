@@ -9,20 +9,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-  static const String userName = "John Doe";
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        // Daftarkan semua Cubit/BLoC di sini
         BlocProvider(create: (context) => FieldCardCubit()..loadListFields()),
         BlocProvider(create: (context) => BannerHeroCubit()..loadBanners()),
       ],
-      child: _buildBody(context),
+      // Gunakan 'child' dan panggil widget body yang baru
+      child: const _HomeScreenBody(),
     );
   }
+}
 
-  Widget _buildBody(BuildContext context) {
+// Widget BARU untuk menampung seluruh UI Body
+class _HomeScreenBody extends StatelessWidget {
+  const _HomeScreenBody();
+  static const String userName = "John Doe";
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -56,6 +64,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  // Semua method helper (yang tadinya di HomeScreen) dipindahkan ke sini
   Widget _headerHome(BuildContext context) {
     String getInitials(String name) {
       List<String> names = name.split(" ");
@@ -83,9 +92,9 @@ class HomeScreen extends StatelessWidget {
                 color: Colors.grey[600],
               ),
             ),
-            Text(
+            const Text(
               userName,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -168,6 +177,8 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _cardSection(BuildContext context) {
+    // Baris ini sekarang 100% aman
+    final scrollController = context.read<FieldCardCubit>().scrollController;
     return BlocBuilder<FieldCardCubit, FieldCardState>(
       builder: (context, state) {
         if (state is FieldLoadingState) {
@@ -178,13 +189,25 @@ class HomeScreen extends StatelessWidget {
         }
 
         if (state is FieldLoadedState) {
+          if (state.fields.isEmpty) {
+            return const Center(child: Text("Tidak ada lahan tersedia"));
+          }
           return SizedBox(
             height: 210,
             child: ListView.builder(
+              controller: scrollController,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               scrollDirection: Axis.horizontal,
-              itemCount: state.fields.length,
+              itemCount: state.hasReachedMax
+                  ? state.fields.length
+                  : state.fields.length + 1,
               itemBuilder: (context, index) {
+                if (index >= state.fields.length) {
+                  return const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
                 final field = state.fields[index];
                 return FieldCard(field: field);
               },

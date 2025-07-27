@@ -7,19 +7,22 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class HomeApiServices {
-  Future<DataState<ResponseListFieldHomeModel>> getFields();
+  Future<DataState<ResponseListFieldHomeModel>> getFields({String? url});
 }
 
 class HomeApiServicesImpl implements HomeApiServices {
   @override
-  Future<DataState<ResponseListFieldHomeModel>> getFields() async {
+  Future<DataState<ResponseListFieldHomeModel>> getFields({String? url}) async {
     try {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
 
       var token = sharedPreferences.getString('token');
+      final endPoint = url ?? ApiUrls.listOfFields;
+      final queryParameters = url == null ? {'per_page': 5} : null;
       var response = await sl<DioClient>().get(
-        ApiUrls.listOfFields,
+        endPoint,
+        queryParameters: queryParameters,
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
