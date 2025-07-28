@@ -9,13 +9,12 @@ import 'package:clean_architecture_poktani/features/home/presentation/bloc/field
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class FieldCardCubit extends Cubit<FieldCardState> {
   final GetListFieldsUseCase _getListFieldsUseCase = sl<GetListFieldsUseCase>();
   final ScrollController scrollController = ScrollController();
 
   String? _nextCursor;
-  bool _isLoading = false; // Tambahkan 'kunci' ini
+  bool _isLoading = false;
 
   FieldCardCubit() : super(FieldInitialState()) {
     scrollController.addListener(_onScroll);
@@ -30,14 +29,13 @@ class FieldCardCubit extends Cubit<FieldCardState> {
   }
 
   Future<void> loadListFields() async {
-    // Guard clause yang sudah aman dari race condition
     if (_isLoading ||
         (state is FieldLoadedState &&
             (state as FieldLoadedState).hasReachedMax)) {
       return;
     }
 
-    _isLoading = true; // Kunci prosesnya
+    _isLoading = true;
 
     try {
       final List<ListFieldEntity> currentFields = state is FieldLoadedState
@@ -64,7 +62,7 @@ class FieldCardCubit extends Cubit<FieldCardState> {
         );
       }
     } finally {
-      _isLoading = false; // Pastikan kunci selalu terbuka setelah selesai
+      _isLoading = false;
     }
   }
 

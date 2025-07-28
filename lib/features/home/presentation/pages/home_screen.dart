@@ -17,20 +17,17 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // Daftarkan semua Cubit/BLoC di sini
         BlocProvider(create: (context) => ListFieldCubit()..loadListFields()),
         BlocProvider(create: (context) => BannerHeroCubit()..loadBanners()),
         BlocProvider(
           create: (context) => ProfileDisplayCubit()..displayProfile(),
         ),
       ],
-      // Gunakan 'child' dan panggil widget body yang baru
       child: const _HomeScreenBody(),
     );
   }
 }
 
-// Widget BARU untuk menampung seluruh UI Body
 class _HomeScreenBody extends StatelessWidget {
   const _HomeScreenBody();
 
