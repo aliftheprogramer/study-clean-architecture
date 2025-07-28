@@ -52,7 +52,7 @@ class ListFieldCubit extends Cubit<ListFieldState> {
 
     if (dataState is DataSuccess && dataState.data != null) {
       final newFields = dataState.data!.fields;
-      _nextPageUrl = dataState.data!.links?.next;
+      _nextPageUrl = dataState.data!.paging?.cursors?.next;
       final hasReachedMax = _nextPageUrl == null;
 
       // Gabungkan list lama dan baru menggunakan operator '+'

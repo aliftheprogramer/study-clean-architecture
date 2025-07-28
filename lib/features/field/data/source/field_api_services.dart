@@ -22,18 +22,21 @@ class FieldApiServicesImpl implements FieldApiServices {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       var token = sharedPreferences.getString('token');
-      final endPoint = url ?? ApiUrls.listOfFields;
-      final queryParameters = url == null ? {'per_page': 5} : null;
-      var response = await sl<DioClient>().get(
-        endPoint,
-        queryParameters: queryParameters,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Accept': 'application/json',
-          },
-        ),
+
+      final options = Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
       );
+      final String endpoint =  url ?? ApiUrls.listOfFields;
+
+      final response = await sl<DioClient>().get(
+        endpoint,
+        queryParameters: {'per_page': 5},
+        options: options,
+      );
+
       final fieldResponse = ResponseListFieldsModel.fromMap(response.data);
       return DataSuccess(data: fieldResponse);
     } on DioException catch (e) {
