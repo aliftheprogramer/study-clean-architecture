@@ -2,6 +2,7 @@
 import 'package:clean_architecture_poktani/core/network/dio_client.dart';
 import 'package:clean_architecture_poktani/core/network/map_dio_lient.dart';
 import 'package:clean_architecture_poktani/features/field/data/repository_impl/soil_type_repository_impl.dart';
+import 'package:clean_architecture_poktani/features/field/domain/usecase/detail_field_usecase.dart';
 import 'package:clean_architecture_poktani/features/map/data/source/geocoding_api_services.dart';
 import 'package:clean_architecture_poktani/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:clean_architecture_poktani/features/auth/data/source/auth_api_service.dart';
@@ -61,4 +62,5 @@ void setupServiceLocator() {
     GetAddressFromCoordinatesUseCase(sl<GeocodingRepository>()),
   );
   sl.registerSingleton<GetSoilTypeUsecase>(GetSoilTypeUsecase());
+  sl.registerSingleton<GetDetailFieldUseCase>(GetDetailFieldUseCase());
 }

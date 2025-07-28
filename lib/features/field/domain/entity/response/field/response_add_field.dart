@@ -1,7 +1,6 @@
-
 import 'package:clean_architecture_poktani/features/field/domain/entity/list_field_entity.dart';
 
-class ResponseAddFieldEntity {
+class ResponseRequestFieldFormEntity {
   final int id;
   final String? name;
   final double? landArea;
@@ -10,7 +9,7 @@ class ResponseAddFieldEntity {
   final String? soilType;
   final ActiveCropEntity? activeCrop;
 
-  ResponseAddFieldEntity({
+  ResponseRequestFieldFormEntity({
     required this.id,
     required this.name,
     required this.landArea,

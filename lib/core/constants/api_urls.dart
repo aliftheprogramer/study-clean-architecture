@@ -8,6 +8,7 @@ class ApiUrls {
   //field
   static const listOfFields = "$baseUrl/fields";
   static const addField = "$baseUrl/fields";
+  static const detailField = "$baseUrl/fields";
 
   //soil type
   static const listOfSoilTypes = "$baseUrl/soil-types";

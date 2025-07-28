@@ -1,4 +1,4 @@
-class AddFieldEntity {
+class RequestFieldFormEntity {
   final String name;
   final double landArea;
   final String latitude;
@@ -8,7 +8,7 @@ class AddFieldEntity {
   final String district;
   final int soilTypeId;
 
-  AddFieldEntity({
+  RequestFieldFormEntity({
     required this.name,
     required this.landArea,
     required this.latitude,

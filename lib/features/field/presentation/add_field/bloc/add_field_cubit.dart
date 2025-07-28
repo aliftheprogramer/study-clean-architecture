@@ -1,4 +1,4 @@
-import 'package:clean_architecture_poktani/features/field/domain/entity/request/request_add_field.dart';
+import 'package:clean_architecture_poktani/features/field/domain/entity/request/request_form_field.dart';
 import 'package:clean_architecture_poktani/features/field/domain/usecase/add_field_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
@@ -10,13 +10,13 @@ class AddFieldCubit extends Cubit<AddFieldState> {
 
   AddFieldCubit(this._addFieldUseCase) : super(const AddFieldInitial());
 
-
   void updateSelectedLocation(LatLng location) {
     if (state is AddFieldInitial) {
       final currentState = state as AddFieldInitial;
       emit(currentState.copyWith(location: location));
     }
   }
+
   void nameChanged(String name) {
     if (state is AddFieldInitial) {
       emit((state as AddFieldInitial).copyWith(name: name));
@@ -79,7 +79,7 @@ class AddFieldCubit extends Cubit<AddFieldState> {
   }
 
   // 2. GANTI NAMA METHOD AGAR LEBIH JELAS
-  Future<void>  submitField() async {
+  Future<void> submitField() async {
     if (state is AddFieldInitial) {
       final currentState = state as AddFieldInitial;
       Logger().d(
@@ -94,7 +94,7 @@ class AddFieldCubit extends Cubit<AddFieldState> {
       );
       emit(AddFieldLoading());
 
-      final params = AddFieldEntity(
+      final params = RequestFieldFormEntity(
         name: currentState.name,
         landArea: currentState.landArea,
         latitude: currentState.location?.latitude.toString() ?? '',

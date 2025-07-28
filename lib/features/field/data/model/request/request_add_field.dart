@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:clean_architecture_poktani/features/field/domain/entity/request/request_add_field.dart';
+import 'package:clean_architecture_poktani/features/field/domain/entity/request/request_form_field.dart';
 
 class AddFieldRequestModel {
   // 1. UBAH PROPERTI MENJADI camelCase (Standar Dart)
@@ -41,7 +41,7 @@ class AddFieldRequestModel {
   }
 
   // 4. fromEntity() MENERIMA ENTITY DENGAN camelCase
-  factory AddFieldRequestModel.fromEntity(AddFieldEntity entity) {
+  factory AddFieldRequestModel.fromEntity(RequestFieldFormEntity entity) {
     return AddFieldRequestModel(
       name: entity.name,
       landArea: entity.landArea, // <-- Gunakan properti camelCase dari entity

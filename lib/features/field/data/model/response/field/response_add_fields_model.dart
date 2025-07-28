@@ -53,8 +53,8 @@ class ResponseAddFieldsModel {
 
   // Method untuk konversi ke Entity di Domain Layer
   // ... di dalam kelas ResponseAddFieldsModel
-  ResponseAddFieldEntity toEntity() {
-    return ResponseAddFieldEntity(
+  ResponseRequestFieldFormEntity toEntity() {
+    return ResponseRequestFieldFormEntity(
       id: id,
       name: name,
       landArea: landArea,
