@@ -1,5 +1,5 @@
-import 'package:clean_architecture_poktani/features/home/presentation/bloc/field_card/field_card_cubit.dart';
-import 'package:clean_architecture_poktani/features/home/presentation/bloc/field_card/field_card_state.dart';
+import 'package:clean_architecture_poktani/features/field/presentation/list_field/bloc/field_cubit.dart';
+import 'package:clean_architecture_poktani/features/field/presentation/list_field/bloc/field_state.dart';
 import 'package:clean_architecture_poktani/features/home/presentation/bloc/hero/hero_cubit.dart';
 import 'package:clean_architecture_poktani/features/home/presentation/bloc/hero/hero_state.dart';
 import 'package:clean_architecture_poktani/features/home/presentation/pages/widget/field_card.dart';
@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         // Daftarkan semua Cubit/BLoC di sini
-        BlocProvider(create: (context) => FieldCardCubit()..loadListFields()),
+        BlocProvider(create: (context) => ListFieldCubit()..loadListFields()),
         BlocProvider(create: (context) => BannerHeroCubit()..loadBanners()),
       ],
       // Gunakan 'child' dan panggil widget body yang baru
@@ -194,17 +194,17 @@ class _HomeScreenBody extends StatelessWidget {
 
   Widget _cardSection(BuildContext context) {
     // Baris ini sekarang 100% aman
-    final scrollController = context.read<FieldCardCubit>().scrollController;
-    return BlocBuilder<FieldCardCubit, FieldCardState>(
+    final scrollController = context.read<ListFieldCubit>().scrollController;
+    return BlocBuilder<ListFieldCubit, ListFieldState>(
       builder: (context, state) {
-        if (state is FieldLoadingState) {
+        if (state is ListFieldLoading) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (state is FieldErrorState) {
+        if (state is ListFieldError) {
           return Center(child: Text(state.message));
         }
 
-        if (state is FieldLoadedState) {
+        if (state is ListFieldLoaded) {
           if (state.fields.isEmpty) {
             return const Center(child: Text("Tidak ada lahan tersedia"));
           }

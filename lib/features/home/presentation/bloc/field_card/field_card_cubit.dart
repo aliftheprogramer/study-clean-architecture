@@ -2,16 +2,16 @@
 
 import 'package:clean_architecture_poktani/core/resources/data_state.dart';
 import 'package:clean_architecture_poktani/core/services/services_locator.dart';
-import 'package:clean_architecture_poktani/features/home/domain/entity/field.dart';
-import 'package:clean_architecture_poktani/features/home/domain/usecase/home_get_list_fields_use_case.dart';
+import 'package:clean_architecture_poktani/features/field/domain/entity/list_field_entity.dart';
+import 'package:clean_architecture_poktani/features/field/domain/usecase/field_usecase.dart';
+
 import 'package:clean_architecture_poktani/features/home/presentation/bloc/field_card/field_card_state.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
+
 
 class FieldCardCubit extends Cubit<FieldCardState> {
-  final HomeGetListFieldsUseCase _getListFieldsUseCase =
-      sl<HomeGetListFieldsUseCase>();
+  final GetListFieldsUseCase _getListFieldsUseCase = sl<GetListFieldsUseCase>();
   final ScrollController scrollController = ScrollController();
 
   String? _nextCursor;
@@ -40,20 +40,18 @@ class FieldCardCubit extends Cubit<FieldCardState> {
     _isLoading = true; // Kunci prosesnya
 
     try {
-      final List<ItemFieldHomeEntity> currentFields = state is FieldLoadedState
+      final List<ListFieldEntity> currentFields = state is FieldLoadedState
           ? (state as FieldLoadedState).fields
           : [];
       if (state is FieldInitialState) {
         emit(FieldLoadingState());
       }
 
-      final dataState = await _getListFieldsUseCase(
-        param: HomeGetListFieldsUseCaseParams(cursor: _nextCursor),
-      );
+      final dataState = await _getListFieldsUseCase(param: _nextCursor);
 
       if (dataState is DataSuccess && dataState.data != null) {
-        final newFields = dataState.data!.data;
-        _nextCursor = dataState.data!.paging.cursors.next;
+        final newFields = dataState.data!.fields;
+        _nextCursor = dataState.data!.paging?.cursors?.next;
         final hasReachedMax = _nextCursor == null;
         final allFields = currentFields + newFields;
 

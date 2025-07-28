@@ -70,14 +70,15 @@ class ListFieldModel {
   });
 
   Map<String, dynamic> toMap() {
+    // ... bagian ini tidak perlu diubah
     return <String, dynamic>{
       'id': id,
       'name': name,
-      'landArea': landArea,
-      'pictureUrl': pictureUrl,
+      'land_area': landArea, // DIUBAH: Disesuaikan agar konsisten
+      'picture_url': pictureUrl, // DIUBAH: Disesuaikan agar konsisten
       'address': address?.toMap(),
-      'soilType': soilType,
-      'activeCrop': activeCrop?.toMap(),
+      'soil_type': soilType, // DIUBAH: Disesuaikan agar konsisten
+      'active_crop': activeCrop?.toMap(), // DIUBAH: Disesuaikan agar konsisten
     };
   }
 
@@ -85,16 +86,20 @@ class ListFieldModel {
     return ListFieldModel(
       id: map['id'] as int,
       name: map['name'] != null ? map['name'] as String : null,
-      landArea: map['landArea'] != null ? map['landArea'] as double : null,
-      pictureUrl: map['pictureUrl'] != null
-          ? map['pictureUrl'] as String
+      // DIUBAH: Penanganan tipe data int/double yang lebih aman
+      landArea: (map['land_area'] as num?)?.toDouble(),
+      // DIUBAH: Menggunakan key 'picture_url' dari JSON
+      pictureUrl: map['picture_url'] != null
+          ? map['picture_url'] as String
           : null,
       address: map['address'] != null
           ? AddressModel.fromMap(map['address'] as Map<String, dynamic>)
           : null,
-      soilType: map['soilType'] != null ? map['soilType'] as String : null,
-      activeCrop: map['activeCrop'] != null
-          ? ActiveCropModel.fromMap(map['activeCrop'] as Map<String, dynamic>)
+      // DIUBAH: Menggunakan key 'soil_type' dari JSON
+      soilType: map['soil_type'] != null ? map['soil_type'] as String : null,
+      // DIUBAH: Menggunakan key 'active_crop' dari JSON
+      activeCrop: map['active_crop'] != null
+          ? ActiveCropModel.fromMap(map['active_crop'] as Map<String, dynamic>)
           : null,
     );
   }
@@ -169,13 +174,15 @@ class ActiveCropModel {
   ActiveCropModel({required this.id, required this.seedName});
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{'id': id, 'seedName': seedName};
+    // DIUBAH: Disesuaikan agar konsisten
+    return <String, dynamic>{'id': id, 'seed_name': seedName};
   }
 
   factory ActiveCropModel.fromMap(Map<String, dynamic> map) {
     return ActiveCropModel(
       id: map['id'] as int,
-      seedName: map['seedName'] != null ? map['seedName'] as String : null,
+      // DIUBAH: Menggunakan key 'seed_name' dari JSON
+      seedName: map['seed_name'] != null ? map['seed_name'] as String : null,
     );
   }
 

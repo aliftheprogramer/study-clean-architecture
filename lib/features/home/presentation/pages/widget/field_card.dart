@@ -1,8 +1,9 @@
-import 'package:clean_architecture_poktani/features/home/domain/entity/field.dart';
+import 'package:clean_architecture_poktani/features/field/domain/entity/list_field_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class FieldCard extends StatelessWidget {
-  final ItemFieldHomeEntity field;
+  final ListFieldEntity field;
   const FieldCard({super.key, required this.field});
 
   @override
@@ -30,7 +31,7 @@ class FieldCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    field.name,
+                    field.name ?? 'Lahan Tanpa Nama',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
