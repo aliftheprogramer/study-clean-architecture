@@ -4,6 +4,9 @@ import 'package:clean_architecture_poktani/features/home/presentation/bloc/hero/
 import 'package:clean_architecture_poktani/features/home/presentation/bloc/hero/hero_state.dart';
 import 'package:clean_architecture_poktani/features/home/presentation/pages/widget/field_card.dart';
 import 'package:clean_architecture_poktani/features/home/presentation/pages/widget/hero_card.dart';
+import 'package:clean_architecture_poktani/features/profile/domain/entities/user_entity.dart';
+import 'package:clean_architecture_poktani/features/profile/presentation/bloc/profile_display_cubit.dart';
+import 'package:clean_architecture_poktani/features/profile/presentation/bloc/user_display_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,6 +20,9 @@ class HomeScreen extends StatelessWidget {
         // Daftarkan semua Cubit/BLoC di sini
         BlocProvider(create: (context) => ListFieldCubit()..loadListFields()),
         BlocProvider(create: (context) => BannerHeroCubit()..loadBanners()),
+        BlocProvider(
+          create: (context) => ProfileDisplayCubit()..displayProfile(),
+        ),
       ],
       // Gunakan 'child' dan panggil widget body yang baru
       child: const _HomeScreenBody(),
@@ -27,7 +33,6 @@ class HomeScreen extends StatelessWidget {
 // Widget BARU untuk menampung seluruh UI Body
 class _HomeScreenBody extends StatelessWidget {
   const _HomeScreenBody();
-  static const String userName = "John Doe";
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +45,22 @@ class _HomeScreenBody extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: _headerHome(context),
+                BlocBuilder<ProfileDisplayCubit, ProfileDisplayState>(
+                  builder: (context, state) {
+                    if (state is UserLoadedState) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: _headerHome(context, state.userEntity),
+                      );
+                    }
+                    if (state is UserLoadingState) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    }
+                    return const SizedBox();
+                  },
                 ),
                 const SizedBox(height: 24),
                 _heroSection(context),
@@ -81,7 +99,7 @@ class _HomeScreenBody extends StatelessWidget {
   }
 
   // Semua method helper (yang tadinya di HomeScreen) dipindahkan ke sini
-  Widget _headerHome(BuildContext context) {
+  Widget _headerHome(BuildContext context, UserEntity userEntity) {
     String getInitials(String name) {
       List<String> names = name.split(" ");
       String initials = "";
@@ -108,9 +126,9 @@ class _HomeScreenBody extends StatelessWidget {
                 color: Colors.grey[600],
               ),
             ),
-            const Text(
-              userName,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              userEntity.name,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -118,7 +136,7 @@ class _HomeScreenBody extends StatelessWidget {
           radius: 24,
           backgroundColor: Colors.green[100],
           child: Text(
-            getInitials(userName),
+            getInitials(userEntity.name),
             style: const TextStyle(
               color: Colors.green,
               fontSize: 20,
