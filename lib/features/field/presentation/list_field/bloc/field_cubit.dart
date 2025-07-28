@@ -12,7 +12,8 @@ class ListFieldCubit extends Cubit<ListFieldState> {
   final GetListFieldsUseCase _getListFieldsUseCase = sl<GetListFieldsUseCase>();
   final ScrollController scrollController = ScrollController();
 
-  String? _nextPageUrl;
+  String? _nextCursor;
+  bool _isLoading = false; // Kunci
 
   ListFieldCubit() : super(ListFieldInitial()) {
     scrollController.addListener(_onScroll);
@@ -20,7 +21,6 @@ class ListFieldCubit extends Cubit<ListFieldState> {
   }
 
   void _onScroll() {
-    if (state is ListFieldLoading) return; // Mencegah panggilan saat loading
     if (scrollController.position.pixels >=
         scrollController.position.maxScrollExtent * 0.9) {
       loadListFields();
@@ -29,40 +29,47 @@ class ListFieldCubit extends Cubit<ListFieldState> {
 
   Future<void> loadListFields() async {
     // Guard clause untuk mencegah fetch jika sedang loading atau sudah maksimal
-    if (state is ListFieldLoading ||
+    if (_isLoading ||
         (state is ListFieldLoaded &&
             (state as ListFieldLoaded).hasReachedMax)) {
       return;
     }
 
-    // ================== LOGIKA BARU DITERAPKAN DI SINI ==================
+    _isLoading = true; // Kunci prosesnya
+    try {
+      List<ListFieldEntity> currentFields = state is ListFieldLoaded
+          ? (state as ListFieldLoaded).fields
+          : [];
+      // Ambil data yang sudah ada jika state-nya ListFieldLoaded
+      if (state is ListFieldLoaded) {
+        currentFields = (state as ListFieldLoaded).fields;
+      }
 
-    List<ListFieldEntity> currentFields = [];
-    // Ambil data yang sudah ada jika state-nya ListFieldLoaded
-    if (state is ListFieldLoaded) {
-      currentFields = (state as ListFieldLoaded).fields;
-    }
+      // Tampilkan loading HANYA untuk pemanggilan pertama kali
+      if (state is ListFieldInitial) {
+        emit(ListFieldLoading());
+      }
 
-    // Tampilkan loading HANYA untuk pemanggilan pertama kali
-    if (state is ListFieldInitial) {
-      emit(ListFieldLoading());
-    }
+      final dataState = await _getListFieldsUseCase(param: _nextCursor);
 
-    final dataState = await _getListFieldsUseCase(param: _nextPageUrl);
+      if (dataState is DataSuccess && dataState.data != null) {
+        final newFields = dataState.data!.fields;
+        _nextCursor = dataState.data!.paging?.cursors?.next;
+        final hasReachedMax = _nextCursor == null;
 
-    if (dataState is DataSuccess && dataState.data != null) {
-      final newFields = dataState.data!.fields;
-      _nextPageUrl = dataState.data!.paging?.cursors?.next;
-      final hasReachedMax = _nextPageUrl == null;
+        // Gabungkan list lama dan baru menggunakan operator '+'
+        final allFields = currentFields + newFields;
 
-      // Gabungkan list lama dan baru menggunakan operator '+'
-      final allFields = currentFields + newFields;
-
-      emit(ListFieldLoaded(fields: allFields, hasReachedMax: hasReachedMax));
-    } else if (dataState is DataFailed) {
-      emit(
-        ListFieldError(dataState.error?.message ?? "An unknown error occurred"),
-      );
+        emit(ListFieldLoaded(fields: allFields, hasReachedMax: hasReachedMax));
+      } else if (dataState is DataFailed) {
+        emit(
+          ListFieldError(
+            dataState.error?.message ?? "An unknown error occurred",
+          ),
+        );
+      }
+    } finally {
+      _isLoading = false; // Lepaskan kunci
     }
   }
 

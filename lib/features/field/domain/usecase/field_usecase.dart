@@ -8,6 +8,6 @@ class GetListFieldsUseCase
     implements Usecase<DataState<FieldResponseEntity>, String?> {
   @override
   Future<DataState<FieldResponseEntity>> call({String? param}) {
-    return sl<FieldRepository>().getFields();
+    return sl<FieldRepository>().getFields(cursor: param);
   }
 }

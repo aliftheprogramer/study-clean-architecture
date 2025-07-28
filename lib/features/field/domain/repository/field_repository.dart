@@ -5,7 +5,7 @@ import 'package:clean_architecture_poktani/features/field/domain/entity/response
 import 'package:dartz/dartz.dart';
 
 abstract class FieldRepository {
-  Future<DataState<FieldResponseEntity>> getFields({String? url});
+  Future<DataState<FieldResponseEntity>> getFields({String? cursor});
   Future<Either<DataFailed, ResponseAddFieldEntity>> addField(
     AddFieldEntity field,
   );

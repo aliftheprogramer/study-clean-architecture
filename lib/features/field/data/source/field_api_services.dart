@@ -9,7 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class FieldApiServices {
-  Future<DataState<ResponseListFieldsModel>> getFields({String? url});
+  Future<DataState<ResponseListFieldsModel>> getFields({String? cursor});
   Future<DataState<ResponseAddFieldsModel>> addField(
     AddFieldRequestModel field,
   );
@@ -17,24 +17,27 @@ abstract class FieldApiServices {
 
 class FieldApiServicesImpl implements FieldApiServices {
   @override
-  Future<DataState<ResponseListFieldsModel>> getFields({String? url}) async {
+  Future<DataState<ResponseListFieldsModel>> getFields({String? cursor}) async {
     try {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       var token = sharedPreferences.getString('token');
 
-      final options = Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      );
-      final String endpoint =  url ?? ApiUrls.listOfFields;
+      final Map<String, dynamic> queryParameters = {'per_page': 5};
+
+      if (cursor != null && cursor.isNotEmpty) {
+        queryParameters['cursor'] = cursor;
+      }
 
       final response = await sl<DioClient>().get(
-        endpoint,
-        queryParameters: {'per_page': 5},
-        options: options,
+        ApiUrls.listOfFields,
+        queryParameters: queryParameters,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        ),
       );
 
       final fieldResponse = ResponseListFieldsModel.fromMap(response.data);

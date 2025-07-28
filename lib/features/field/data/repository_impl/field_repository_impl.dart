@@ -11,9 +11,9 @@ import 'package:dio/dio.dart';
 
 class FieldRepositoryImpl implements FieldRepository {
   @override
-  Future<DataState<FieldResponseEntity>> getFields({String? url}) async {
+  Future<DataState<FieldResponseEntity>> getFields({String? cursor}) async {
     try {
-      final httpResponse = await sl<FieldApiServices>().getFields(url: url);
+      final httpResponse = await sl<FieldApiServices>().getFields(cursor: cursor);
 
       if (httpResponse.data != null) {
         return DataSuccess(data: httpResponse.data!.toEntity());
