@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:clean_architecture_poktani/core/resources/data_state.dart';
 import 'package:clean_architecture_poktani/core/services/services_locator.dart'; // <-- WAJIB IMPORT sl
-import 'package:clean_architecture_poktani/features/field/domain/usecase/map_usecase.dart'; // <-- WAJIB IMPORT use case
+import 'package:clean_architecture_poktani/features/map/domain/usecase/map_usecase.dart'; // <-- WAJIB IMPORT use case
 import 'map_state.dart';
 
 class MapCubit extends Cubit<MapState> {

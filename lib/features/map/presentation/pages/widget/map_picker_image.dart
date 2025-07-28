@@ -1,5 +1,5 @@
-import 'package:clean_architecture_poktani/features/field/presentation/map/bloc/map_cubit.dart';
-import 'package:clean_architecture_poktani/features/field/presentation/map/bloc/map_state.dart';
+import 'package:clean_architecture_poktani/features/map/presentation/bloc/map_cubit.dart';
+import 'package:clean_architecture_poktani/features/map/presentation/bloc/map_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';

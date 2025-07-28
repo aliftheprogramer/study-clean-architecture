@@ -1,4 +1,4 @@
-import 'package:clean_architecture_poktani/features/field/presentation/map/bloc/initial_location_state.dart';
+import 'package:clean_architecture_poktani/features/map/presentation/bloc/initial_location_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';

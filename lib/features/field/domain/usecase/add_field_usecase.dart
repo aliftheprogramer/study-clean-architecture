@@ -4,7 +4,7 @@ import 'package:clean_architecture_poktani/core/usecases/usecase.dart';
 import 'package:clean_architecture_poktani/features/field/domain/entity/request/request_add_field.dart';
 import 'package:clean_architecture_poktani/features/field/domain/entity/response/field/response_add_field.dart';
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
+
 
 import '../repository/field_repository.dart';
 

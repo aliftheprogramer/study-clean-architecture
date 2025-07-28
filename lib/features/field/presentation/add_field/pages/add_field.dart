@@ -4,11 +4,11 @@ import 'package:clean_architecture_poktani/features/field/domain/usecase/add_fie
 import 'package:clean_architecture_poktani/features/field/presentation/add_field/bloc/add_field_cubit.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/add_field/bloc/add_field_state.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/get_soil_type/pages/search_soil_type_page.dart';
-import 'package:clean_architecture_poktani/features/field/presentation/map/bloc/initial_location_cubit.dart';
-import 'package:clean_architecture_poktani/features/field/presentation/map/bloc/initial_location_state.dart';
-import 'package:clean_architecture_poktani/features/field/presentation/map/bloc/map_state.dart';
-import 'package:clean_architecture_poktani/features/field/presentation/map/pages/initial_location_page.dart';
-import 'package:clean_architecture_poktani/features/field/presentation/map/pages/widget/map_picker_image.dart';
+import 'package:clean_architecture_poktani/features/map/presentation/bloc/initial_location_cubit.dart';
+import 'package:clean_architecture_poktani/features/map/presentation/bloc/initial_location_state.dart';
+import 'package:clean_architecture_poktani/features/map/presentation/bloc/map_state.dart';
+import 'package:clean_architecture_poktani/features/map/presentation/pages/initial_location_page.dart';
+import 'package:clean_architecture_poktani/features/map/presentation/pages/widget/map_picker_image.dart';
 import 'package:clean_architecture_poktani/widget/custom_button_fleld.dart';
 import 'package:clean_architecture_poktani/widget/custom_form_text_field.dart';
 import 'package:flutter/material.dart';

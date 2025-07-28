@@ -1,6 +1,6 @@
 import 'package:clean_architecture_poktani/core/resources/data_state.dart';
 import 'package:clean_architecture_poktani/features/field/domain/entity/response/field/response_address_detail_entity.dart';
-import 'package:clean_architecture_poktani/features/field/domain/repository/map_repository.dart';
+import 'package:clean_architecture_poktani/features/map/domain/repository/map_repository.dart';
 
 class GetAddressFromCoordinatesUseCase {
   final GeocodingRepository _repository;

@@ -8,7 +8,8 @@ class FieldCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 228,
+      width: 300,
+
       margin: EdgeInsets.only(right: 16, left: 16, bottom: 0),
       child: Card(
         clipBehavior: Clip.antiAlias, //cut image sesuai dengan card
