@@ -1,3 +1,5 @@
+// lib/features/field/presentation/list_field/bloc/field_cubit.dart
+
 import 'package:clean_architecture_poktani/core/resources/data_state.dart';
 import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 import 'package:clean_architecture_poktani/features/field/domain/entity/list_field_entity.dart';
@@ -13,13 +15,12 @@ class ListFieldCubit extends Cubit<ListFieldState> {
   String? _nextPageUrl;
 
   ListFieldCubit() : super(ListFieldInitial()) {
-    // Tambahkan listener saat cubit dibuat
     scrollController.addListener(_onScroll);
-    // Panggil data pertama kali
     loadListFields();
   }
 
   void _onScroll() {
+    if (state is ListFieldLoading) return; // Mencegah panggilan saat loading
     if (scrollController.position.pixels >=
         scrollController.position.maxScrollExtent * 0.9) {
       loadListFields();
@@ -27,13 +28,22 @@ class ListFieldCubit extends Cubit<ListFieldState> {
   }
 
   Future<void> loadListFields() async {
+    // Guard clause untuk mencegah fetch jika sedang loading atau sudah maksimal
     if (state is ListFieldLoading ||
         (state is ListFieldLoaded &&
             (state as ListFieldLoaded).hasReachedMax)) {
       return;
     }
 
-    // Tampilkan loading untuk pemanggilan pertama
+    // ================== LOGIKA BARU DITERAPKAN DI SINI ==================
+
+    List<ListFieldEntity> currentFields = [];
+    // Ambil data yang sudah ada jika state-nya ListFieldLoaded
+    if (state is ListFieldLoaded) {
+      currentFields = (state as ListFieldLoaded).fields;
+    }
+
+    // Tampilkan loading HANYA untuk pemanggilan pertama kali
     if (state is ListFieldInitial) {
       emit(ListFieldLoading());
     }
@@ -45,16 +55,10 @@ class ListFieldCubit extends Cubit<ListFieldState> {
       _nextPageUrl = dataState.data!.links?.next;
       final hasReachedMax = _nextPageUrl == null;
 
-      final currentFields = state is ListFieldLoaded
-          ? (state as ListFieldLoaded).fields
-          : <ListFieldEntity>[]; // Beri tipe eksplisit pada list kosong
+      // Gabungkan list lama dan baru menggunakan operator '+'
+      final allFields = currentFields + newFields;
 
-      emit(
-        ListFieldLoaded(
-          fields: List.of(currentFields)..addAll(newFields),
-          hasReachedMax: hasReachedMax,
-        ),
-      );
+      emit(ListFieldLoaded(fields: allFields, hasReachedMax: hasReachedMax));
     } else if (dataState is DataFailed) {
       emit(
         ListFieldError(dataState.error?.message ?? "An unknown error occurred"),
@@ -62,7 +66,6 @@ class ListFieldCubit extends Cubit<ListFieldState> {
     }
   }
 
-  // Pastikan untuk membuang controller saat cubit ditutup
   @override
   Future<void> close() {
     scrollController.dispose();
