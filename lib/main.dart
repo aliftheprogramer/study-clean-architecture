@@ -2,6 +2,7 @@ import 'package:clean_architecture_poktani/common/bloc/auth/auth_state.dart';
 import 'package:clean_architecture_poktani/common/bloc/auth/auth_state_cubit.dart';
 import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/welcome.dart';
+import 'package:clean_architecture_poktani/features/field/presentation/detail_field/pages/detail_field_page.dart';
 import 'package:clean_architecture_poktani/features/main/presentation/pages/pages_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +31,8 @@ class MyApp extends StatelessWidget {
               return PagesScreen();
             }
             if (state is UnAuthenticated) {
-              return WelcomePage();
+              // return WelcomePage();
+              return DetailFieldPage();
             }
             return Container(); // example use for splash screen or loading state
           },

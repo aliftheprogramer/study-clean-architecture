@@ -43,6 +43,8 @@ dependencies:
   flutter_map: ^8.1.1
   latlong2: ^0.9.1
   geolocator: ^14.0.2
+  flutter_svg: ^2.2.0
+  dotted_border: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -71,3 +73,7 @@ flutter:
     - assets/rawr.png
     - assets/Group.png
     - assets/splash.png
+    - assets/plant.svg
+    - assets/backgroundappbar1.png
+    - assets/backgroundappbar2.png
+    - assets/backgroundappbar3.png
