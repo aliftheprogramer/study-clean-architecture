@@ -35,6 +35,10 @@ import 'package:clean_architecture_poktani/features/seed/data/repository_impl/se
 import 'package:clean_architecture_poktani/features/seed/data/source/seed_api_service.dart';
 import 'package:clean_architecture_poktani/features/seed/domain/repository/seed_repository.dart';
 import 'package:clean_architecture_poktani/features/seed/domain/usecase/get_seeds_usecase.dart';
+import 'package:clean_architecture_poktani/features/units/data/repository_impl/unit_repository_impl.dart';
+import 'package:clean_architecture_poktani/features/units/data/source/unit_api_service.dart';
+import 'package:clean_architecture_poktani/features/units/domain/repository/unit_repository.dart';
+import 'package:clean_architecture_poktani/features/units/domain/usecase/get_units_usecase.dart';
 import 'package:get_it/get_it.dart';
 
 final sl = GetIt.instance;
@@ -51,6 +55,11 @@ void setupServiceLocator() {
   sl.registerSingleton<GeocodingApiService>(GeocodingApiServiceImpl());
   sl.registerSingleton<SoilTypeApiServices>(SoilTypeApiServicesImpl());
   sl.registerSingleton<CropApiService>(CropApiServiceImpl());
+
+  // Units feature
+  sl.registerLazySingleton<UnitApiService>(() => UnitApiServiceImpl());
+  sl.registerLazySingleton<UnitRepository>(() => UnitRepositoryImpl());
+  sl.registerLazySingleton<GetUnitsUseCase>(() => GetUnitsUseCase());
 
   // Seed feature
   sl.registerLazySingleton<SeedApiService>(() => SeedApiServiceImpl());

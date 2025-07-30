@@ -16,4 +16,6 @@ class ApiUrls {
   //crop
 
   static const addCrop = "$baseUrl/fields";
+  // units
+  static const listOfUnits = "$baseUrl/units";
 }

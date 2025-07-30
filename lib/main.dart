@@ -4,6 +4,7 @@ import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/welcome.dart';
 
 import 'package:clean_architecture_poktani/features/seed/presentation/pages/seed_page.dart';
+import 'package:clean_architecture_poktani/features/units/presentation/pages/unit_page_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         home: BlocBuilder<AuthStateCubit, AuthState>(
           builder: (context, state) {
             if (state is Authenticated) {
-              return SeedPage();
+              return UnitPageList();
               // return PagesScreen();
             }
             if (state is UnAuthenticated) {
