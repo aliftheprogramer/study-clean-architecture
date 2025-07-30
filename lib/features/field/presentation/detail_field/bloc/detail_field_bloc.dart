@@ -12,8 +12,7 @@ class DetailFieldBloc extends Bloc<DetailFieldEvent, DetailFieldState> {
         await Future.delayed(const Duration(seconds: 1));
 
         // --- GANTI VARIABEL INI UNTUK MENGUJI SETIAP KONDISI ---
-        final data = dummyDataFull;
-
+        final data = dummyDataNoFertilizer;
 
         Logger().i(
           'Menguji dengan data: ${data.keys.firstWhere((k) => data[k] == dummyDataFull['data'], orElse: () => 'unknown')}',
