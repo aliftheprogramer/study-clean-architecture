@@ -3,6 +3,7 @@
 import 'package:clean_architecture_poktani/features/field/domain/entity/response/detail_field/response_detail_field_entity.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/detail_field/bloc/detail_field_bloc.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/detail_field/bloc/detail_field_state.dart';
+import 'package:clean_architecture_poktani/widget/custom_button_fleld.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -103,6 +104,10 @@ class DetailFieldPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context, FieldDetailEntity field) {
+    final bool isButtonEnabled =
+        field.activeCrop != null &&
+        field.activeCrop!.fertilizersUsed != null &&
+        field.activeCrop!.fertilizersUsed!.isNotEmpty;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -115,6 +120,21 @@ class DetailFieldPage extends StatelessWidget {
             _buildAddCropCard(context)
           else
             _buildActiveCropDetails(context, field.activeCrop!),
+
+          const SizedBox(height: 24),
+
+          CustomButtonField(
+            text: 'Siap Panen',
+            isEnabled: isButtonEnabled,
+
+            onPressed: isButtonEnabled
+                ? () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Lahan siap panen!')),
+                    );
+                  }
+                : null,
+          ),
         ],
       ),
     );

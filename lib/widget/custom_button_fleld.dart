@@ -4,29 +4,29 @@ class CustomButtonField extends StatelessWidget {
   /// Teks yang akan ditampilkan di tombol.
   final String text;
 
-  /// Kondisi untuk mengaktifkan tombol. Jika `true`, tombol akan berwarna hijau dan bisa diklik.
-  /// Jika `false`, tombol akan berwarna abu-abu dan tidak bisa diklik.
+  /// Kondisi untuk mengaktifkan tombol. Jika `true`, tombol akan aktif.
+  /// Jika `false`, tombol akan non-aktif.
   final bool isEnabled;
 
   /// Fungsi yang akan dijalankan saat tombol ditekan.
   final VoidCallback? onPressed;
 
+  // Hapus 'color' dari constructor ini
   const CustomButtonField({
     super.key,
     required this.text,
-    this.isEnabled = false, // Defaultnya tombol tidak aktif
+    this.isEnabled = false,
     this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity, // Membuat lebar tombol memenuhi layar
-      height: 50, // Memberi tinggi yang pas
+      width: double.infinity,
+      height: 50,
       child: ElevatedButton(
-        // Kuncinya ada di sini:
-        // Jika isEnabled true, gunakan fungsi onPressed.
-        // Jika false, berikan null agar tombol otomatis non-aktif.
+        // Logika ini sudah benar: jika isEnabled, gunakan onPressed, jika tidak, null.
+        // Flutter akan otomatis menonaktifkan tombol jika onPressed-nya null.
         onPressed: isEnabled ? onPressed : null,
         style: ElevatedButton.styleFrom(
           // Ganti warna berdasarkan isEnabled
