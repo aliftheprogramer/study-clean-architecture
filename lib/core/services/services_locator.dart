@@ -1,6 +1,10 @@
 // import 'package:clean_architecture_poktani/common/bloc/auth/auth_state_cubit.dart';
 import 'package:clean_architecture_poktani/core/network/dio_client.dart';
 import 'package:clean_architecture_poktani/core/network/map_dio_lient.dart';
+import 'package:clean_architecture_poktani/features/crop/data/repository_impl/crop_repository_impl.dart';
+import 'package:clean_architecture_poktani/features/crop/data/source/crop_api_service.dart';
+import 'package:clean_architecture_poktani/features/crop/domain/repository/crop_repository.dart';
+import 'package:clean_architecture_poktani/features/crop/domain/usecase/add_crop_usecase.dart';
 import 'package:clean_architecture_poktani/features/field/data/repository_impl/soil_type_repository_impl.dart';
 import 'package:clean_architecture_poktani/features/field/domain/usecase/detail_field_usecase.dart';
 import 'package:clean_architecture_poktani/features/map/data/source/geocoding_api_services.dart';
@@ -27,6 +31,10 @@ import 'package:clean_architecture_poktani/features/profile/data/source/profile_
 import 'package:clean_architecture_poktani/features/profile/domain/repository/user_repository.dart';
 import 'package:clean_architecture_poktani/features/profile/domain/usecase/get_user.dart';
 import 'package:clean_architecture_poktani/features/profile/domain/usecase/logout.dart';
+import 'package:clean_architecture_poktani/features/seed/data/repository_impl/seed_repository_impl.dart';
+import 'package:clean_architecture_poktani/features/seed/data/source/seed_api_service.dart';
+import 'package:clean_architecture_poktani/features/seed/domain/repository/seed_repository.dart';
+import 'package:clean_architecture_poktani/features/seed/domain/usecase/get_seeds_usecase.dart';
 import 'package:get_it/get_it.dart';
 
 final sl = GetIt.instance;
@@ -42,6 +50,12 @@ void setupServiceLocator() {
   sl.registerSingleton<FieldApiServices>(FieldApiServicesImpl());
   sl.registerSingleton<GeocodingApiService>(GeocodingApiServiceImpl());
   sl.registerSingleton<SoilTypeApiServices>(SoilTypeApiServicesImpl());
+  sl.registerSingleton<CropApiService>(CropApiServiceImpl());
+
+  // Seed feature
+  sl.registerLazySingleton<SeedApiService>(() => SeedApiServiceImpl());
+  sl.registerLazySingleton<SeedRepository>(() => SeedRepositoryImpl());
+  sl.registerLazySingleton<GetSeedsUseCase>(() => GetSeedsUseCase());
 
   //repositories
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
@@ -49,6 +63,7 @@ void setupServiceLocator() {
   sl.registerSingleton<FieldRepository>(FieldRepositoryImpl());
   sl.registerSingleton<GeocodingRepository>(GeocodingRepositoryImpl());
   sl.registerSingleton<SoilTypeRepository>(SoilTypeRepositoryImpl());
+  sl.registerSingleton<CropRepository>(CropRepositoryImpl());
 
   // usecases
   sl.registerSingleton<SignupUsecase>(SignupUsecase());
@@ -63,4 +78,5 @@ void setupServiceLocator() {
   );
   sl.registerSingleton<GetSoilTypeUsecase>(GetSoilTypeUsecase());
   sl.registerSingleton<GetDetailFieldUseCase>(GetDetailFieldUseCase());
+  sl.registerSingleton<AddCropUsecase>(AddCropUsecase());
 }

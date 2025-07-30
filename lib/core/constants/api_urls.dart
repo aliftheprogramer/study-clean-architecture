@@ -12,4 +12,8 @@ class ApiUrls {
 
   //soil type
   static const listOfSoilTypes = "$baseUrl/soil-types";
+
+  //crop
+
+  static const addCrop = "$baseUrl/fields";
 }
