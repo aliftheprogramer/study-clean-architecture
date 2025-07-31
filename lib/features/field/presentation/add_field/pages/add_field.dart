@@ -209,7 +209,6 @@ class AddFieldPage extends StatelessWidget {
                   if (currentLocation != null) {
                     locationForMap = currentLocation;
                   } else {
- 
                     if (!context.mounted) return;
                     final tempLocationCubit = InitialLocationCubit()
                       ..fetchInitialLocation();

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 
 class UnitPage extends StatelessWidget {
-  const UnitPage({super.key});
+  const UnitPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class UnitPage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (state is UnitSuccess) {
               if (state.units.isEmpty) {
-                return const Center(child: Text('Tidak ada data satuan unit.'));
+                return const Center(child: Text('Tidak ada data satuan.'));
               }
               return ListView.builder(
                 itemCount: state.units.length,
@@ -28,7 +28,8 @@ class UnitPage extends StatelessWidget {
                   final unit = state.units[index];
                   return ListTile(
                     title: Text(unit.name),
-                    subtitle: Text(unit.symbol),
+                    subtitle: Text('Simbol: ${unit.symbol}'),
+                    trailing: Text('ID: ${unit.id}'),
                   );
                 },
               );

@@ -1,3 +1,4 @@
+import 'package:clean_architecture_poktani/features/seed/domain/entity/seed_list_response_entity.dart'; // Pastikan import ini ada
 import 'package:clean_architecture_poktani/features/seed/domain/usecase/get_seeds_usecase.dart';
 import 'package:clean_architecture_poktani/features/seed/presentation/bloc/seed_cubit.dart';
 import 'package:clean_architecture_poktani/features/seed/presentation/bloc/seed_state.dart';
@@ -13,7 +14,7 @@ class SeedPage extends StatelessWidget {
     return BlocProvider(
       create: (_) => SeedCubit(sl<GetSeedsUseCase>())..fetchSeeds(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Daftar Benih')),
+        appBar: AppBar(title: const Text('Pilih Benih')), // Judul diubah
         body: BlocBuilder<SeedCubit, SeedState>(
           builder: (context, state) {
             if (state is SeedLoading) {
@@ -32,6 +33,12 @@ class SeedPage extends StatelessWidget {
                       'Varietas: ${seed.variety}\nStok: ${seed.stock} ${seed.unit}',
                     ),
                     trailing: Text('Rp ${seed.price.toStringAsFixed(0)}'),
+                    // --- TAMBAHKAN INI ---
+                    onTap: () {
+                      // Mengembalikan data 'seed' ke halaman sebelumnya
+                      Navigator.pop(context, seed);
+                    },
+                    // ---------------------
                   );
                 },
               );

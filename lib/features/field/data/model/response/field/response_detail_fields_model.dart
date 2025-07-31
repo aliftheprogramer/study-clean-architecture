@@ -30,7 +30,6 @@ class ResponseFieldDetailModel {
     return ResponseFieldDetailEntity(
       status: status,
       message: message,
-      // Panggil .toEntity() pada data di dalamnya
       data: data.toEntity(),
     );
   }
@@ -153,20 +152,26 @@ class AddressModel {
 }
 
 class CoordinatesModel {
-  final String latitude;
-  final String longitude;
+  // DIUBAH: Jadikan nullable karena data dari API bisa null
+  final String? latitude;
+  final String? longitude;
 
   CoordinatesModel({required this.latitude, required this.longitude});
 
   factory CoordinatesModel.fromMap(Map<String, dynamic> map) {
     return CoordinatesModel(
-      latitude: map['latitude'] as String,
-      longitude: map['longitude'] as String,
+      // DIUBAH: Tambahkan pengecekan null
+      latitude: map['latitude'] as String?,
+      longitude: map['longitude'] as String?,
     );
   }
 
   CoordinatesEntity toEntity() {
-    return CoordinatesEntity(latitude: latitude, longitude: longitude);
+    // DIUBAH: Beri nilai default jika null saat konversi ke Entity
+    return CoordinatesEntity(
+      latitude: latitude ?? '',
+      longitude: longitude ?? '',
+    );
   }
 }
 
@@ -175,16 +180,18 @@ class ActiveCropDetailModel {
   final String planting_date;
   final SeedModel seed;
   final String coordinator_name;
-  final List<FertilizerUsageModel> fertilizers_used;
-  final List<PesticideUsageModel> pesticides_used;
+  // DIUBAH: Jadikan list nullable
+  final List<FertilizerUsageModel>? fertilizers_used;
+  final List<PesticideUsageModel>? pesticides_used;
 
   ActiveCropDetailModel({
     required this.id,
     required this.planting_date,
     required this.seed,
     required this.coordinator_name,
-    required this.fertilizers_used,
-    required this.pesticides_used,
+    // DIUBAH: Hapus 'required'
+    this.fertilizers_used,
+    this.pesticides_used,
   });
 
   factory ActiveCropDetailModel.fromMap(Map<String, dynamic> map) {
@@ -193,16 +200,22 @@ class ActiveCropDetailModel {
       planting_date: map['planting_date'] as String,
       seed: SeedModel.fromMap(map['seed'] as Map<String, dynamic>),
       coordinator_name: map['coordinator_name'] as String,
-      fertilizers_used: List<FertilizerUsageModel>.from(
-        (map['fertilizers_used'] as List<dynamic>).map<FertilizerUsageModel>(
-          (x) => FertilizerUsageModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
-      pesticides_used: List<PesticideUsageModel>.from(
-        (map['pesticides_used'] as List<dynamic>).map<PesticideUsageModel>(
-          (x) => PesticideUsageModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      // DIUBAH: Tambahkan pengecekan null
+      fertilizers_used: map['fertilizers_used'] != null
+          ? List<FertilizerUsageModel>.from(
+              (map['fertilizers_used'] as List).map<FertilizerUsageModel>(
+                (x) => FertilizerUsageModel.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
+      // DIUBAH: Tambahkan pengecekan null
+      pesticides_used: map['pesticides_used'] != null
+          ? List<PesticideUsageModel>.from(
+              (map['pesticides_used'] as List).map<PesticideUsageModel>(
+                (x) => PesticideUsageModel.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
     );
   }
 
@@ -212,8 +225,9 @@ class ActiveCropDetailModel {
       plantingDate: planting_date,
       seed: seed.toEntity(),
       coordinatorName: coordinator_name,
-      fertilizersUsed: fertilizers_used.map((e) => e.toEntity()).toList(),
-      pesticidesUsed: pesticides_used.map((e) => e.toEntity()).toList(),
+      // DIUBAH: Gunakan null-aware operator
+      fertilizersUsed: fertilizers_used?.map((e) => e.toEntity()).toList(),
+      pesticidesUsed: pesticides_used?.map((e) => e.toEntity()).toList(),
     );
   }
 }

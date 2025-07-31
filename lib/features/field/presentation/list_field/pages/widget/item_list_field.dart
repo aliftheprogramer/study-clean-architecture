@@ -11,7 +11,7 @@ class ItemListField extends StatelessWidget {
   final String district;
 
   final String landArea;
-  final String seedName;
+  final String? seedName;
 
   const ItemListField({
     super.key,
@@ -22,11 +22,14 @@ class ItemListField extends StatelessWidget {
     required this.village,
     required this.district,
     required this.landArea,
-    required this.seedName,
+    this.seedName,
   });
 
   @override
   Widget build(BuildContext context) {
+    final plantText = (seedName != null && seedName!.isNotEmpty)
+        ? seedName
+        : "belum menanam";
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Card(
@@ -76,7 +79,7 @@ class ItemListField extends StatelessWidget {
                   const SizedBox(height: 6),
                   _buildInfoRow(
                     icon: Icons.energy_savings_leaf_outlined,
-                    text: 'Tanaman: ${seedName}',
+                    text: 'Tanaman: $plantText',
                   ),
                 ],
               ),
