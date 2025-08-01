@@ -3,7 +3,7 @@ import 'package:clean_architecture_poktani/features/crop/presentation/page/add_c
 import 'package:flutter/material.dart';
 
 class AddCropOptionPage extends StatelessWidget {
-  final String fieldId;
+  final int fieldId;
   const AddCropOptionPage({super.key, required this.fieldId});
 
   @override
@@ -23,7 +23,8 @@ class AddCropOptionPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const AddCropFromNurseryPage(),
+                    builder: (context) =>
+                        AddCropFromNurseryPage(fieldId: fieldId),
                   ),
                 );
               },

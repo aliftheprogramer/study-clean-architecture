@@ -1,10 +1,14 @@
 import 'package:flutter/widgets.dart';
 
 class AddCropFromNurseryPage extends StatelessWidget {
-  const AddCropFromNurseryPage({super.key});
+  final int fieldId;
+  const AddCropFromNurseryPage({super.key, required this.fieldId});
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Text(
+      'Add Crop From Nursery Page - Field ID: $fieldId',
+      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    );
   }
 }

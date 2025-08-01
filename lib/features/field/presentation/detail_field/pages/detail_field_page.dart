@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clean_architecture_poktani/widget/custom_button_fleld.dart';
 
+import '../../../../crop/presentation/page/add_crop_option_page.dart';
+
 // ... (impor lainnya tetap sama)
 
 class DetailFieldPage extends StatelessWidget {
@@ -136,12 +138,12 @@ Widget _buildBody(BuildContext context, FieldDetailEntity field) {
         if (field.activeCrop == null)
           BuildAddCropCard(
             onAdd: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Navigasi ke halaman Tambah Tanaman...'),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddCropOptionPage(fieldId: field.id),
                 ),
               );
-              // Navigasi ke halaman tambah tanaman
             },
           )
         else
