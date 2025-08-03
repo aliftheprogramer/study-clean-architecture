@@ -1,6 +1,6 @@
 import 'package:clean_architecture_poktani/features/crop/domain/usecase/add_crop_usecase.dart';
 import 'package:clean_architecture_poktani/features/crop/domain/usecase/params/add_crop_params.dart';
-import 'package:clean_architecture_poktani/features/crop/presentation/bloc/from_nursery/add_crop_state.dart';
+import 'package:clean_architecture_poktani/features/crop/presentation/bloc/add_crop_state.dart';
 import 'package:clean_architecture_poktani/core/resources/data_state.dart';
 import 'package:clean_architecture_poktani/features/crop/domain/entity/request/entity_request_add_crop.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

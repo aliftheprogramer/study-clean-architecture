@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         home: BlocBuilder<AuthStateCubit, AuthState>(
           builder: (context, state) {
             if (state is Authenticated) {
-              // return UnitPageList();
+              // return SeedPage();
               return PagesScreen();
             }
             if (state is UnAuthenticated) {

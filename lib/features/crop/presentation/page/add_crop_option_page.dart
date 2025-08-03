@@ -19,14 +19,17 @@ class AddCropOptionPage extends StatelessWidget {
             ElevatedButton.icon(
               icon: const Icon(Icons.move_down),
               label: const Text('Pindah Tanam (dari Persemaian)'),
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
                         AddCropFromNurseryPage(fieldId: fieldId),
                   ),
                 );
+                if (result == true && context.mounted) {
+                  Navigator.pop(context, true);
+                }
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
@@ -37,13 +40,17 @@ class AddCropOptionPage extends StatelessWidget {
             ElevatedButton.icon(
               icon: const Icon(Icons.eco),
               label: const Text('Tanam Langsung'),
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AddCropDirectlyPage(fieldId: fieldId),
+                    builder: (context) =>
+                        AddCropDirectlyPage(fieldId: fieldId.toString()),
                   ),
                 );
+                if (result == true && context.mounted) {
+                  Navigator.pop(context, true);
+                }
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),

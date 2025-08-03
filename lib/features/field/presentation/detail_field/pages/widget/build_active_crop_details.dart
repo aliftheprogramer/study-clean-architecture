@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'build_usage_section.dart';
 
 class BuildActiveCropDetails extends StatelessWidget {
-  final ActiveCropDetailEntity crop;
+  final ActiveCropDetailEntity? crop;
   final VoidCallback? onAddFertilizer;
   final VoidCallback? onAddPesticide;
 
@@ -38,22 +38,22 @@ class BuildActiveCropDetails extends StatelessWidget {
                 _buildInfoRow(
                   Icons.grass_outlined,
                   'Jenis Tanaman',
-                  crop.seed.name,
+                  crop?.seed.name ?? '',
                 ),
                 _buildInfoRow(
                   Icons.eco_outlined,
                   'Varietas',
-                  crop.seed.variety,
+                  crop?.seed.variety ?? '',
                 ),
                 _buildInfoRow(
                   Icons.date_range_outlined,
                   'Tanggal Tanam',
-                  crop.plantingDate,
+                  crop?.plantingDate ?? '',
                 ),
                 _buildInfoRow(
                   Icons.groups_outlined,
                   'Koordinator',
-                  crop.coordinatorName,
+                  crop?.coordinatorName ?? '',
                 ),
               ],
             ),
@@ -62,7 +62,7 @@ class BuildActiveCropDetails extends StatelessWidget {
         const SizedBox(height: 24),
         BuildUsageSection(
           title: 'Pupuk yang Digunakan',
-          items: crop.fertilizersUsed,
+          items: crop?.fertilizersUsed ?? [],
           emptyMessage: 'Belum ada data pupuk yang ditambahkan.',
           buttonLabel: 'Tambah Data Pupuk',
           onButtonPressed: onAddFertilizer ?? () {},
@@ -75,7 +75,7 @@ class BuildActiveCropDetails extends StatelessWidget {
         const SizedBox(height: 24),
         BuildUsageSection(
           title: 'Pestisida yang Digunakan',
-          items: crop.pesticidesUsed,
+          items: crop?.pesticidesUsed ?? [],
           emptyMessage: 'Belum ada data pestisida yang ditambahkan.',
           buttonLabel: 'Tambah Data Pestisida',
           onButtonPressed: onAddPesticide ?? () {},

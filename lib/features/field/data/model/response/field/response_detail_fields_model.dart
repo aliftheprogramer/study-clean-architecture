@@ -179,7 +179,7 @@ class ActiveCropDetailModel {
   final int id;
   final String planting_date;
   final SeedModel seed;
-  final String coordinator_name;
+  final String? coordinator_name; // DIUBAH: Menjadi nullable
   // DIUBAH: Jadikan list nullable
   final List<FertilizerUsageModel>? fertilizers_used;
   final List<PesticideUsageModel>? pesticides_used;
@@ -188,7 +188,7 @@ class ActiveCropDetailModel {
     required this.id,
     required this.planting_date,
     required this.seed,
-    required this.coordinator_name,
+    this.coordinator_name, // DIUBAH: Tidak lagi required
     // DIUBAH: Hapus 'required'
     this.fertilizers_used,
     this.pesticides_used,
@@ -199,7 +199,8 @@ class ActiveCropDetailModel {
       id: map['id'] as int,
       planting_date: map['planting_date'] as String,
       seed: SeedModel.fromMap(map['seed'] as Map<String, dynamic>),
-      coordinator_name: map['coordinator_name'] as String,
+      coordinator_name:
+          map['coordinator_name'] as String?, // DIUBAH: Menjadi nullable
       // DIUBAH: Tambahkan pengecekan null
       fertilizers_used: map['fertilizers_used'] != null
           ? List<FertilizerUsageModel>.from(

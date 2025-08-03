@@ -33,7 +33,7 @@ class FieldDetailEntity {
     required this.name,
     required this.owner,
     required this.landArea,
-    this.pictureUrl,
+    this.pictureUrl = 'assets/backgroundappbar1.png',
     required this.address,
     required this.coordinates,
     required this.soilType,
@@ -112,8 +112,7 @@ class ActiveCropDetailEntity {
   final int id;
   final String plantingDate;
   final SeedEntity seed;
-  final String coordinatorName;
-  // Tandai sebagai nullable
+  final String? coordinatorName; // <-- DIUBAH: Menjadi nullable
   final List<FertilizerUsageEntity>? fertilizersUsed;
   final List<PesticideUsageEntity>? pesticidesUsed;
 
@@ -121,8 +120,7 @@ class ActiveCropDetailEntity {
     required this.id,
     required this.plantingDate,
     required this.seed,
-    required this.coordinatorName,
-    // Hapus 'required' karena sudah boleh null
+    this.coordinatorName, // <-- DIUBAH: Tidak lagi required
     this.fertilizersUsed,
     this.pesticidesUsed,
   });
@@ -143,24 +141,24 @@ class ActiveCropDetailEntity {
       id: map['id'] as int,
       plantingDate: map['planting_date'] as String,
       seed: SeedEntity.fromMap(map['seed'] as Map<String, dynamic>),
-      coordinatorName: map['coordinator_name'] as String,
+      coordinatorName:
+          map['coordinator_name']
+              as String?, // <-- DIUBAH: Parsing sebagai nullable
 
-      // DIUBAH: Tambahkan pengecekan null sebelum parsing list
       fertilizersUsed: map['fertilizers_used'] != null
           ? List<FertilizerUsageEntity>.from(
               (map['fertilizers_used'] as List).map<FertilizerUsageEntity>(
                 (x) => FertilizerUsageEntity.fromMap(x as Map<String, dynamic>),
               ),
             )
-          : null, // Jika null, kembalikan null
-      // DIUBAH: Lakukan hal yang sama untuk pesticides
+          : null,
       pesticidesUsed: map['pesticides_used'] != null
           ? List<PesticideUsageEntity>.from(
               (map['pesticides_used'] as List).map<PesticideUsageEntity>(
                 (x) => PesticideUsageEntity.fromMap(x as Map<String, dynamic>),
               ),
             )
-          : null, // Jika null, kembalikan null
+          : null,
     );
   }
 
