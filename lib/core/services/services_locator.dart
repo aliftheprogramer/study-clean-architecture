@@ -26,6 +26,7 @@ import 'package:clean_architecture_poktani/features/field/domain/usecase/add_fie
 import 'package:clean_architecture_poktani/features/field/domain/usecase/field_usecase.dart';
 import 'package:clean_architecture_poktani/features/field/domain/usecase/get_soil_type_usecase.dart';
 import 'package:clean_architecture_poktani/features/map/domain/usecase/map_usecase.dart';
+import 'package:clean_architecture_poktani/features/nutriens/domain/usecase/get_nutriens_usecase.dart';
 import 'package:clean_architecture_poktani/features/profile/data/repository/user_repository_impl.dart';
 import 'package:clean_architecture_poktani/features/profile/data/source/profile_api_service.dart';
 import 'package:clean_architecture_poktani/features/profile/domain/repository/user_repository.dart';
@@ -88,4 +89,5 @@ void setupServiceLocator() {
   sl.registerSingleton<GetSoilTypeUsecase>(GetSoilTypeUsecase());
   sl.registerSingleton<GetDetailFieldUseCase>(GetDetailFieldUseCase());
   sl.registerSingleton<AddCropUsecase>(AddCropUsecase());
+  sl.registerSingleton<GetNutriensUsecase>(GetNutriensUsecase());
 }
