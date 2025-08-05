@@ -1,3 +1,5 @@
+// lib/features/field/presentation/list_field/bloc/field_cubit.dart
+
 import 'package:clean_architecture_poktani/core/resources/data_state.dart';
 import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 import 'package:clean_architecture_poktani/features/field/domain/entity/list_field_entity.dart';
@@ -10,12 +12,11 @@ class ListFieldCubit extends Cubit<ListFieldState> {
   final GetListFieldsUseCase _getListFieldsUseCase = sl<GetListFieldsUseCase>();
   final ScrollController scrollController = ScrollController();
 
-  String? _nextPageUrl;
+  String? _nextCursor;
+  bool _isLoading = false; // Kunci
 
   ListFieldCubit() : super(ListFieldInitial()) {
-    // Tambahkan listener saat cubit dibuat
     scrollController.addListener(_onScroll);
-    // Panggil data pertama kali
     loadListFields();
   }
 
@@ -27,42 +28,51 @@ class ListFieldCubit extends Cubit<ListFieldState> {
   }
 
   Future<void> loadListFields() async {
-    if (state is ListFieldLoading ||
+    // Guard clause untuk mencegah fetch jika sedang loading atau sudah maksimal
+    if (_isLoading ||
         (state is ListFieldLoaded &&
             (state as ListFieldLoaded).hasReachedMax)) {
       return;
     }
 
-    // Tampilkan loading untuk pemanggilan pertama
-    if (state is ListFieldInitial) {
-      emit(ListFieldLoading());
-    }
-
-    final dataState = await _getListFieldsUseCase(param: _nextPageUrl);
-
-    if (dataState is DataSuccess && dataState.data != null) {
-      final newFields = dataState.data!.fields;
-      _nextPageUrl = dataState.data!.links?.next;
-      final hasReachedMax = _nextPageUrl == null;
-
-      final currentFields = state is ListFieldLoaded
+    _isLoading = true; // Kunci prosesnya
+    try {
+      List<ListFieldEntity> currentFields = state is ListFieldLoaded
           ? (state as ListFieldLoaded).fields
-          : <ListFieldEntity>[]; // Beri tipe eksplisit pada list kosong
+          : [];
+      // Ambil data yang sudah ada jika state-nya ListFieldLoaded
+      if (state is ListFieldLoaded) {
+        currentFields = (state as ListFieldLoaded).fields;
+      }
 
-      emit(
-        ListFieldLoaded(
-          fields: List.of(currentFields)..addAll(newFields),
-          hasReachedMax: hasReachedMax,
-        ),
-      );
-    } else if (dataState is DataFailed) {
-      emit(
-        ListFieldError(dataState.error?.message ?? "An unknown error occurred"),
-      );
+      // Tampilkan loading HANYA untuk pemanggilan pertama kali
+      if (state is ListFieldInitial) {
+        emit(ListFieldLoading());
+      }
+
+      final dataState = await _getListFieldsUseCase(param: _nextCursor);
+
+      if (dataState is DataSuccess && dataState.data != null) {
+        final newFields = dataState.data!.fields;
+        _nextCursor = dataState.data!.paging?.cursors?.next;
+        final hasReachedMax = _nextCursor == null;
+
+        // Gabungkan list lama dan baru menggunakan operator '+'
+        final allFields = currentFields + newFields;
+
+        emit(ListFieldLoaded(fields: allFields, hasReachedMax: hasReachedMax));
+      } else if (dataState is DataFailed) {
+        emit(
+          ListFieldError(
+            dataState.error?.message ?? "An unknown error occurred",
+          ),
+        );
+      }
+    } finally {
+      _isLoading = false; // Lepaskan kunci
     }
   }
 
-  // Pastikan untuk membuang controller saat cubit ditutup
   @override
   Future<void> close() {
     scrollController.dispose();

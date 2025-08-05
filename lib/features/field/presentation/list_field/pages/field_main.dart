@@ -1,4 +1,5 @@
 import 'package:clean_architecture_poktani/features/field/presentation/add_field/pages/add_field.dart';
+import 'package:clean_architecture_poktani/features/field/presentation/detail_field/pages/detail_field_page.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/list_field/bloc/field_cubit.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/list_field/bloc/field_state.dart';
 import 'package:clean_architecture_poktani/features/field/presentation/list_field/pages/widget/item_list_field.dart';
@@ -29,10 +30,10 @@ class FieldMainPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => AddFieldPage()),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddFieldPage()),
+          );
         },
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
@@ -47,26 +48,17 @@ class _FieldListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Ambil scroll controller langsung dari cubit
     final scrollController = context.read<ListFieldCubit>().scrollController;
 
     return BlocBuilder<ListFieldCubit, ListFieldState>(
       builder: (context, state) {
+        // ... (bagian state loading dan error tidak berubah)
         if (state is ListFieldInitial || state is ListFieldLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
         if (state is ListFieldError) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                state.message,
-                style: const TextStyle(color: Colors.red, fontSize: 16),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
+          return Center(child: Text(state.message));
         }
 
         if (state is ListFieldLoaded) {
@@ -75,28 +67,44 @@ class _FieldListView extends StatelessWidget {
           }
           return ListView.builder(
             controller: scrollController,
-
             itemCount: state.hasReachedMax
                 ? state.fields.length
                 : state.fields.length + 1,
             itemBuilder: (context, index) {
               if (index >= state.fields.length) {
-                // Indikator loading di bawah list
                 return const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Center(child: CircularProgressIndicator()),
                 );
               }
               final field = state.fields[index];
-              return ItemListField(
-                pictureUrl: field.pictureUrl ?? 'assets/rawr.png',
-                soil_type: field.soilType ?? '',
-                sub_village: field.address?.sub_village ?? '',
-                name: field.name ?? '',
-                village: field.address?.village ?? '',
-                district: field.address?.district ?? '',
-                landArea: field.landArea?.toString() ?? '',
-                seedName: field.activeCrop?.seedName ?? '',
+
+              // DIUBAH: Bungkus ItemListField dengan InkWell untuk membuatnya bisa diklik
+              return InkWell(
+                onTap: () {
+                  // Navigasi ke halaman detail dengan membawa ID
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      // Kirim ID ke DetailFieldPage melalui constructor
+                      builder: (context) => DetailFieldPage(
+                        fieldId: field.id
+                            .toString(), // Asumsi 'field' punya properti 'id'
+                      ),
+                    ),
+                  );
+                },
+                child: ItemListField(
+                  // Properti lainnya tetap sama
+                  pictureUrl: field.pictureUrl ?? 'assets/rawr.png',
+                  soil_type: field.soilType ?? '',
+                  sub_village: field.address?.subVillage ?? '',
+                  name: field.name ?? '',
+                  village: field.address?.village ?? '',
+                  district: field.address?.district ?? '',
+                  landArea: field.landArea?.toString() ?? '',
+                  seedName: field.activeCrop?.seedName ?? '',
+                ),
               );
             },
           );

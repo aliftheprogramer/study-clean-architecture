@@ -32,18 +32,18 @@ class ListFieldEntity extends Equatable {
 }
 
 class AddressEntity extends Equatable {
-  final String? sub_village;
+  final String? subVillage;
   final String? village;
   final String? district;
 
   const AddressEntity({
-    required this.sub_village,
+    required this.subVillage,
     required this.village,
     required this.district,
   });
 
   @override
-  List<Object?> get props => [sub_village, village, district];
+  List<Object?> get props => [subVillage, village, district];
 }
 
 class ActiveCropEntity extends Equatable {
@@ -51,49 +51,10 @@ class ActiveCropEntity extends Equatable {
   final String? seedName;
 
   const ActiveCropEntity({required this.id, required this.seedName});
+  ActiveCropEntity toEntity() {
+    return ActiveCropEntity(id: this.id, seedName: this.seedName);
+  }
 
   @override
   List<Object?> get props => [id, seedName];
 }
-
-// final List<ListFieldEntity> dummyListFields = [
-//   ListFieldEntity(
-//     id: 28,
-//     name: "Sawah Subur Jaya",
-//     landArea: 100,
-//     pictureUrl: "assets/placeholder.png", // Contoh dengan gambar
-//     address: AddressEntity(
-//       sub_village: "Panembahan",
-//       village: "Yogyakarta",
-//       district: "Kraton",
-//     ),
-//     soilType: "Podsolik",
-//     activeCrop: ActiveCropEntity(id: 5, seedName: "Padi Sawah"),
-//   ),
-//   ListFieldEntity(
-//     id: 30,
-//     name: "Kebun Makmur Sentosa",
-//     landArea: 150,
-//     pictureUrl: "assets/placeholder.png", // Contoh tanpa gambar
-//     address: AddressEntity(
-//       sub_village: "Caturtunggal",
-//       village: "Sleman",
-//       district: "Depok",
-//     ),
-//     soilType: "Latosol",
-//     activeCrop: ActiveCropEntity(id: 12, seedName: "Jagung Manis"),
-//   ),
-//   ListFieldEntity(
-//     id: 45,
-//     name: "Ladang Hijau Lestari",
-//     landArea: 75,
-//     pictureUrl: "assets/placeholder.png", // Contoh dengan gambar lain
-//     address: AddressEntity(
-//       sub_village: "Wirobrajan",
-//       village: "Yogyakarta",
-//       district: "Wirobrajan",
-//     ),
-//     soilType: "Andosol",
-//     activeCrop: ActiveCropEntity(id: 8, seedName: "Cabai Rawit"),
-//   ),
-// ];

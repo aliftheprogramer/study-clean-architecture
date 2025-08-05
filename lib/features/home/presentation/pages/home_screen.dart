@@ -1,28 +1,38 @@
-import 'package:clean_architecture_poktani/features/home/presentation/bloc/field_card/field_card_cubit.dart';
-import 'package:clean_architecture_poktani/features/home/presentation/bloc/field_card/field_card_state.dart';
+import 'package:clean_architecture_poktani/features/field/presentation/list_field/bloc/field_cubit.dart';
+import 'package:clean_architecture_poktani/features/field/presentation/list_field/bloc/field_state.dart';
 import 'package:clean_architecture_poktani/features/home/presentation/bloc/hero/hero_cubit.dart';
 import 'package:clean_architecture_poktani/features/home/presentation/bloc/hero/hero_state.dart';
 import 'package:clean_architecture_poktani/features/home/presentation/pages/widget/field_card.dart';
 import 'package:clean_architecture_poktani/features/home/presentation/pages/widget/hero_card.dart';
+import 'package:clean_architecture_poktani/features/profile/domain/entities/user_entity.dart';
+import 'package:clean_architecture_poktani/features/profile/presentation/bloc/profile_display_cubit.dart';
+import 'package:clean_architecture_poktani/features/profile/presentation/bloc/user_display_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-  static const String userName = "John Doe";
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => FieldCardCubit()..loadFields()),
+        BlocProvider(create: (context) => ListFieldCubit()..loadListFields()),
         BlocProvider(create: (context) => BannerHeroCubit()..loadBanners()),
+        BlocProvider(
+          create: (context) => ProfileDisplayCubit()..displayProfile(),
+        ),
       ],
-      child: _buildBody(context),
+      child: const _HomeScreenBody(),
     );
   }
+}
 
-  Widget _buildBody(BuildContext context) {
+class _HomeScreenBody extends StatelessWidget {
+  const _HomeScreenBody();
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -32,18 +42,47 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: _headerHome(context),
+                BlocBuilder<ProfileDisplayCubit, ProfileDisplayState>(
+                  builder: (context, state) {
+                    if (state is UserLoadedState) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: _headerHome(context, state.userEntity),
+                      );
+                    }
+                    if (state is UserLoadingState) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    }
+                    return const SizedBox();
+                  },
                 ),
                 const SizedBox(height: 24),
                 _heroSection(context),
                 const SizedBox(height: 24),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Text(
-                    "Lahan Anda",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Lahanku",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "Lihat semua",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -56,7 +95,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _headerHome(BuildContext context) {
+  // Semua method helper (yang tadinya di HomeScreen) dipindahkan ke sini
+  Widget _headerHome(BuildContext context, UserEntity userEntity) {
     String getInitials(String name) {
       List<String> names = name.split(" ");
       String initials = "";
@@ -84,7 +124,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Text(
-              userName,
+              userEntity.name,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
@@ -93,7 +133,7 @@ class HomeScreen extends StatelessWidget {
           radius: 24,
           backgroundColor: Colors.green[100],
           child: Text(
-            getInitials(userName),
+            getInitials(userEntity.name),
             style: const TextStyle(
               color: Colors.green,
               fontSize: 20,
@@ -168,23 +208,37 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _cardSection(BuildContext context) {
-    return BlocBuilder<FieldCardCubit, FieldCardState>(
+    // Baris ini sekarang 100% aman
+    final scrollController = context.read<ListFieldCubit>().scrollController;
+    return BlocBuilder<ListFieldCubit, ListFieldState>(
       builder: (context, state) {
-        if (state is FieldLoadingState) {
+        if (state is ListFieldLoading) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (state is FieldErrorState) {
+        if (state is ListFieldError) {
           return Center(child: Text(state.message));
         }
 
-        if (state is FieldLoadedState) {
+        if (state is ListFieldLoaded) {
+          if (state.fields.isEmpty) {
+            return const Center(child: Text("Tidak ada lahan tersedia"));
+          }
           return SizedBox(
             height: 210,
             child: ListView.builder(
+              controller: scrollController,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               scrollDirection: Axis.horizontal,
-              itemCount: state.fields.length,
+              itemCount: state.hasReachedMax
+                  ? state.fields.length
+                  : state.fields.length + 1,
               itemBuilder: (context, index) {
+                if (index >= state.fields.length) {
+                  return const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
                 final field = state.fields[index];
                 return FieldCard(field: field);
               },

@@ -2,7 +2,6 @@ import 'package:clean_architecture_poktani/core/services/services_locator.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/final_register/button_state.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/bloc/remote/final_register/button_state_cubit.dart';
 import 'package:clean_architecture_poktani/features/auth/presentation/pages/welcome.dart';
-// import 'package:clean_architecture_poktani/features/auth/presentation/pages/widget/custom_submit_auth_button_final.dart'; // Not used anymore
 import 'package:clean_architecture_poktani/features/profile/domain/entities/user_entity.dart';
 import 'package:clean_architecture_poktani/features/profile/domain/usecase/logout.dart';
 import 'package:clean_architecture_poktani/features/profile/presentation/bloc/profile_display_cubit.dart';
